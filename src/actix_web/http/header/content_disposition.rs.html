@@ -1,5 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/http/header/content_disposition.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>content_disposition.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="shortcut icon" href="https://actix.rs/favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../actix_web/index.html'><div class='logo-container'><img src='https://actix.rs/img/logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src&#x2F;http&#x2F;header&#x2F;content_disposition.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>content_disposition.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="shortcut icon" href="https:&#x2F;&#x2F;actix.rs&#x2F;favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../../../actix_web/index.html"><div class="logo-container"><img src="https:&#x2F;&#x2F;actix.rs&#x2F;img&#x2F;logo.png" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../actix_web/index.html"><img src="https:&#x2F;&#x2F;actix.rs&#x2F;img&#x2F;logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -974,24 +975,41 @@
 <span id="973">973</span>
 <span id="974">974</span>
 <span id="975">975</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! # References</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
+<span id="979">979</span>
+<span id="980">980</span>
+<span id="981">981</span>
+<span id="982">982</span>
+<span id="983">983</span>
+<span id="984">984</span>
+<span id="985">985</span>
+<span id="986">986</span>
+<span id="987">987</span>
+<span id="988">988</span>
+<span id="989">989</span>
+</pre><pre class="rust"><code><span class="doccomment">//! The `Content-Disposition` header and associated types.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! &quot;The Content-Disposition Header Field&quot; https://www.ietf.org/rfc/rfc2183.txt</span>
-<span class="doccomment">//! &quot;The Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)&quot; https://www.ietf.org/rfc/rfc6266.txt</span>
-<span class="doccomment">//! &quot;Returning Values from Forms: multipart/form-data&quot; https://www.ietf.org/rfc/rfc7578.txt</span>
-<span class="doccomment">//! Browser conformance tests at: http://greenbytes.de/tech/tc2231/</span>
-<span class="doccomment">//! IANA assignment: http://www.iana.org/assignments/cont-disp/cont-disp.xhtml</span>
+<span class="doccomment">//! # References</span>
+<span class="doccomment">//! - &quot;The Content-Disposition Header Field&quot;:</span>
+<span class="doccomment">//!   &lt;https://datatracker.ietf.org/doc/html/rfc2183&gt;</span>
+<span class="doccomment">//! - &quot;The Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)&quot;:</span>
+<span class="doccomment">//!   &lt;https://datatracker.ietf.org/doc/html/rfc6266&gt;</span>
+<span class="doccomment">//! - &quot;Returning Values from Forms: multipart/form-data&quot;:</span>
+<span class="doccomment">//!   &lt;https://datatracker.ietf.org/doc/html/rfc7578&gt;</span>
+<span class="doccomment">//! - Browser conformance tests at: &lt;http://greenbytes.de/tech/tc2231/&gt;</span>
+<span class="doccomment">//! - IANA assignment: &lt;http://www.iana.org/assignments/cont-disp/cont-disp.xhtml&gt;</span>
 
 <span class="kw">use</span> <span class="ident">once_cell::sync::Lazy</span>;
 <span class="kw">use</span> <span class="ident">regex::Regex</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ExtendedValue</span>, <span class="ident">Header</span>, <span class="ident">IntoHeaderValue</span>, <span class="ident">Writer</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http::header</span>;
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ExtendedValue</span>, <span class="ident">Header</span>, <span class="ident">TryIntoHeaderValue</span>, <span class="ident">Writer</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>;
 
 <span class="doccomment">/// Split at the index of the first `needle` if it exists or at the end.</span>
-<span class="kw">fn</span> <span class="ident">split_once</span>(<span class="ident">haystack</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">needle</span>: <span class="ident">char</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span>) {
+<span class="kw">fn</span> <span class="ident">split_once</span>(<span class="ident">haystack</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">needle</span>: <span class="ident">char</span>) -&gt; (<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span>) {
     <span class="ident">haystack</span>.<span class="ident">find</span>(<span class="ident">needle</span>).<span class="ident">map_or_else</span>(
         <span class="op">|</span><span class="op">|</span> (<span class="ident">haystack</span>, <span class="string">&quot;&quot;</span>),
         <span class="op">|</span><span class="ident">sc</span><span class="op">|</span> {
@@ -1003,7 +1021,7 @@
 
 <span class="doccomment">/// Split at the index of the first `needle` if it exists or at the end, trim the right of the</span>
 <span class="doccomment">/// first part and the left of the last part.</span>
-<span class="kw">fn</span> <span class="ident">split_once_and_trim</span>(<span class="ident">haystack</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">needle</span>: <span class="ident">char</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span>) {
+<span class="kw">fn</span> <span class="ident">split_once_and_trim</span>(<span class="ident">haystack</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">needle</span>: <span class="ident">char</span>) -&gt; (<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span>) {
     <span class="kw">let</span> (<span class="ident">first</span>, <span class="ident">last</span>) <span class="op">=</span> <span class="ident">split_once</span>(<span class="ident">haystack</span>, <span class="ident">needle</span>);
     (<span class="ident">first</span>.<span class="ident">trim_end</span>(), <span class="ident">last</span>.<span class="ident">trim_start</span>())
 }
@@ -1011,20 +1029,24 @@
 <span class="doccomment">/// The implied disposition of the content of the HTTP body.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DispositionType</span> {
-    <span class="doccomment">/// Inline implies default processing</span>
+    <span class="doccomment">/// Inline implies default processing.</span>
     <span class="ident">Inline</span>,
+
     <span class="doccomment">/// Attachment implies that the recipient should prompt the user to save the response locally,</span>
     <span class="doccomment">/// rather than process it normally (as per its media type).</span>
     <span class="ident">Attachment</span>,
+
     <span class="doccomment">/// Used in *multipart/form-data* as defined in</span>
-    <span class="doccomment">/// [RFC7578](https://tools.ietf.org/html/rfc7578) to carry the field name and the file name.</span>
+    <span class="doccomment">/// [RFC 7578](https://datatracker.ietf.org/doc/html/rfc7578) to carry the field name and</span>
+    <span class="doccomment">/// optional filename.</span>
     <span class="ident">FormData</span>,
-    <span class="doccomment">/// Extension type. Should be handled by recipients the same way as Attachment</span>
+
+    <span class="doccomment">/// Extension type. Should be handled by recipients the same way as Attachment.</span>
     <span class="ident">Ext</span>(<span class="ident">String</span>),
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DispositionType</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">origin</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispositionType</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">origin</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) -&gt; <span class="ident">DispositionType</span> {
         <span class="kw">if</span> <span class="ident">origin</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;inline&quot;</span>) {
             <span class="ident">DispositionType::Inline</span>
         } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">origin</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;attachment&quot;</span>) {
@@ -1053,122 +1075,129 @@
     <span class="doccomment">/// For [`DispositionType::FormData`] (i.e. *multipart/form-data*), the name of an field from</span>
     <span class="doccomment">/// the form.</span>
     <span class="ident">Name</span>(<span class="ident">String</span>),
+
     <span class="doccomment">/// A plain file name.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// It is [not supposed](https://tools.ietf.org/html/rfc6266#appendix-D) to contain any</span>
-    <span class="doccomment">/// non-ASCII characters when used in a *Content-Disposition* HTTP response header, where</span>
+    <span class="doccomment">/// It is [not supposed](https://datatracker.ietf.org/doc/html/rfc6266#appendix-D) to contain</span>
+    <span class="doccomment">/// any non-ASCII characters when used in a *Content-Disposition* HTTP response header, where</span>
     <span class="doccomment">/// [`FilenameExt`](DispositionParam::FilenameExt) with charset UTF-8 may be used instead</span>
     <span class="doccomment">/// in case there are Unicode characters in file names.</span>
     <span class="ident">Filename</span>(<span class="ident">String</span>),
+
     <span class="doccomment">/// An extended file name. It must not exist for `ContentType::Formdata` according to</span>
-    <span class="doccomment">/// [RFC7578 Section 4.2](https://tools.ietf.org/html/rfc7578#section-4.2).</span>
+    <span class="doccomment">/// [RFC 7578 §4.2](https://datatracker.ietf.org/doc/html/rfc7578#section-4.2).</span>
     <span class="ident">FilenameExt</span>(<span class="ident">ExtendedValue</span>),
+
     <span class="doccomment">/// An unrecognized regular parameter as defined in</span>
-    <span class="doccomment">/// [RFC5987](https://tools.ietf.org/html/rfc5987) as *reg-parameter*, in</span>
-    <span class="doccomment">/// [RFC6266](https://tools.ietf.org/html/rfc6266) as *token &quot;=&quot; value*. Recipients should</span>
-    <span class="doccomment">/// ignore unrecognizable parameters.</span>
+    <span class="doccomment">/// [RFC 5987 §3.2.1](https://datatracker.ietf.org/doc/html/rfc5987#section-3.2.1) as</span>
+    <span class="doccomment">/// `reg-parameter`, in</span>
+    <span class="doccomment">/// [RFC 6266 §4.1](https://datatracker.ietf.org/doc/html/rfc6266#section-4.1) as</span>
+    <span class="doccomment">/// `token &quot;=&quot; value`. Recipients should ignore unrecognizable parameters.</span>
     <span class="ident">Unknown</span>(<span class="ident">String</span>, <span class="ident">String</span>),
+
     <span class="doccomment">/// An unrecognized extended parameter as defined in</span>
-    <span class="doccomment">/// [RFC5987](https://tools.ietf.org/html/rfc5987) as *ext-parameter*, in</span>
-    <span class="doccomment">/// [RFC6266](https://tools.ietf.org/html/rfc6266) as *ext-token &quot;=&quot; ext-value*. The single</span>
-    <span class="doccomment">/// trailing asterisk is not included. Recipients should ignore unrecognizable parameters.</span>
+    <span class="doccomment">/// [RFC 5987 §3.2.1](https://datatracker.ietf.org/doc/html/rfc5987#section-3.2.1) as</span>
+    <span class="doccomment">/// `ext-parameter`, in</span>
+    <span class="doccomment">/// [RFC 6266 §4.1](https://datatracker.ietf.org/doc/html/rfc6266#section-4.1) as</span>
+    <span class="doccomment">/// `ext-token &quot;=&quot; ext-value`. The single trailing asterisk is not included. Recipients should</span>
+    <span class="doccomment">/// ignore unrecognizable parameters.</span>
     <span class="ident">UnknownExt</span>(<span class="ident">String</span>, <span class="ident">ExtendedValue</span>),
 }
 
 <span class="kw">impl</span> <span class="ident">DispositionParam</span> {
     <span class="doccomment">/// Returns `true` if the parameter is [`Name`](DispositionParam::Name).</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">as_name</span>().<span class="ident">is_some</span>()
     }
 
     <span class="doccomment">/// Returns `true` if the parameter is [`Filename`](DispositionParam::Filename).</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_filename</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_filename</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">as_filename</span>().<span class="ident">is_some</span>()
     }
 
     <span class="doccomment">/// Returns `true` if the parameter is [`FilenameExt`](DispositionParam::FilenameExt).</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_filename_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_filename_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">as_filename_ext</span>().<span class="ident">is_some</span>()
     }
 
     <span class="doccomment">/// Returns `true` if the parameter is [`Unknown`](DispositionParam::Unknown) and the `name`</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// matches.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_unknown</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_unknown</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">as_unknown</span>(<span class="ident">name</span>).<span class="ident">is_some</span>()
     }
 
     <span class="doccomment">/// Returns `true` if the parameter is [`UnknownExt`](DispositionParam::UnknownExt) and the</span>
     <span class="doccomment">/// `name` matches.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_unknown_ext</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_unknown_ext</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">as_unknown_ext</span>(<span class="ident">name</span>).<span class="ident">is_some</span>()
     }
 
     <span class="doccomment">/// Returns the name if applicable.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">DispositionParam::Name</span>(<span class="kw-2">ref</span> <span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">as_str</span>()),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">DispositionParam::Name</span>(<span class="kw-2">ref</span> <span class="ident">name</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">as_str</span>()),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
         }
     }
 
     <span class="doccomment">/// Returns the filename if applicable.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_filename</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_filename</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">DispositionParam::Filename</span>(<span class="kw-2">ref</span> <span class="ident">filename</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">filename</span>.<span class="ident">as_str</span>()),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">DispositionParam::Filename</span>(<span class="kw-2">ref</span> <span class="ident">filename</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">filename</span>.<span class="ident">as_str</span>()),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
         }
     }
 
     <span class="doccomment">/// Returns the filename* if applicable.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_filename_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">ExtendedValue</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_filename_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">ExtendedValue</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">DispositionParam::FilenameExt</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">DispositionParam::FilenameExt</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">value</span>),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
         }
     }
 
     <span class="doccomment">/// Returns the value of the unrecognized regular parameter if it is</span>
     <span class="doccomment">/// [`Unknown`](DispositionParam::Unknown) and the `name` matches.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_unknown</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_unknown</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">DispositionParam::Unknown</span>(<span class="kw-2">ref</span> <span class="ident">ext_name</span>, <span class="kw-2">ref</span> <span class="ident">value</span>)
-                <span class="kw">if</span> <span class="ident">ext_name</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>()) <span class="op">=</span><span class="op">&gt;</span>
+                <span class="kw">if</span> <span class="ident">ext_name</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>()) =&gt;
             {
                 <span class="prelude-val">Some</span>(<span class="ident">value</span>.<span class="ident">as_str</span>())
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
         }
     }
 
     <span class="doccomment">/// Returns the value of the unrecognized extended parameter if it is</span>
     <span class="doccomment">/// [`Unknown`](DispositionParam::Unknown) and the `name` matches.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_unknown_ext</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">ExtendedValue</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_unknown_ext</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">ExtendedValue</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">DispositionParam::UnknownExt</span>(<span class="kw-2">ref</span> <span class="ident">ext_name</span>, <span class="kw-2">ref</span> <span class="ident">value</span>)
-                <span class="kw">if</span> <span class="ident">ext_name</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>()) <span class="op">=</span><span class="op">&gt;</span>
+                <span class="kw">if</span> <span class="ident">ext_name</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>()) =&gt;
             {
                 <span class="prelude-val">Some</span>(<span class="ident">value</span>)
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
         }
     }
 }
 
 <span class="doccomment">/// A *Content-Disposition* header. It is compatible to be used either as</span>
-<span class="doccomment">/// [a response header for the main body](https://mdn.io/Content-Disposition#As_a_response_header_for_the_main_body)</span>
-<span class="doccomment">/// as (re)defined in [RFC6266](https://tools.ietf.org/html/rfc6266), or as</span>
+<span class="doccomment">/// [a response header for the main body](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition#as_a_response_header_for_the_main_body)</span>
+<span class="doccomment">/// as (re)defined in [RFC 6266](https://datatracker.ietf.org/doc/html/rfc6266), or as</span>
 <span class="doccomment">/// [a header for a multipart body](https://mdn.io/Content-Disposition#As_a_header_for_a_multipart_body)</span>
-<span class="doccomment">/// as (re)defined in [RFC7587](https://tools.ietf.org/html/rfc7578).</span>
+<span class="doccomment">/// as (re)defined in [RFC 7587](https://datatracker.ietf.org/doc/html/rfc7578).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// In a regular HTTP response, the *Content-Disposition* response header is a header indicating if</span>
 <span class="doccomment">/// the content is expected to be displayed *inline* in the browser, that is, as a Web page or as</span>
@@ -1182,8 +1211,7 @@
 <span class="doccomment">/// itself, *Content-Disposition* has no effect.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # ABNF</span>
-
-<span class="doccomment">/// ```text</span>
+<span class="doccomment">/// ```plain</span>
 <span class="doccomment">/// content-disposition = &quot;Content-Disposition&quot; &quot;:&quot;</span>
 <span class="doccomment">///                       disposition-type *( &quot;;&quot; disposition-parm )</span>
 <span class="doccomment">///</span>
@@ -1204,19 +1232,17 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Note</span>
+<span class="doccomment">/// *filename* is [not supposed](https://datatracker.ietf.org/doc/html/rfc6266#appendix-D) to</span>
+<span class="doccomment">/// contain any non-ASCII characters when used in a *Content-Disposition* HTTP response header,</span>
+<span class="doccomment">/// where filename* with charset UTF-8 may be used instead in case there are Unicode characters in</span>
+<span class="doccomment">/// file names. Filename is [acceptable](https://datatracker.ietf.org/doc/html/rfc7578#section-4.2)</span>
+<span class="doccomment">/// to be UTF-8 encoded directly in a *Content-Disposition* header for</span>
+<span class="doccomment">/// *multipart/form-data*, though.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// filename is [not supposed](https://tools.ietf.org/html/rfc6266#appendix-D) to contain any</span>
-<span class="doccomment">/// non-ASCII characters when used in a *Content-Disposition* HTTP response header, where</span>
-<span class="doccomment">/// filename* with charset UTF-8 may be used instead in case there are Unicode characters in file</span>
-<span class="doccomment">/// names.</span>
-<span class="doccomment">/// filename is [acceptable](https://tools.ietf.org/html/rfc7578#section-4.2) to be UTF-8 encoded</span>
-<span class="doccomment">/// directly in a *Content-Disposition* header for *multipart/form-data*, though.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// filename* [must not](https://tools.ietf.org/html/rfc7578#section-4.2) be used within</span>
+<span class="doccomment">/// *filename* [must not](https://datatracker.ietf.org/doc/html/rfc7578#section-4.2) be used within</span>
 <span class="doccomment">/// *multipart/form-data*.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// # Example</span>
-<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use actix_web::http::header::{</span>
 <span class="doccomment">///     Charset, ContentDisposition, DispositionParam, DispositionType,</span>
@@ -1262,28 +1288,30 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Security Note</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// If &quot;filename&quot; parameter is supplied, do not use the file name blindly, check and possibly</span>
 <span class="doccomment">/// change to match local file system conventions if applicable, and do not use directory path</span>
-<span class="doccomment">/// information that may be present. See [RFC2183](https://tools.ietf.org/html/rfc2183#section-2.3).</span>
+<span class="doccomment">/// information that may be present.</span>
+<span class="doccomment">/// See [RFC 2183 §2.3](https://datatracker.ietf.org/doc/html/rfc2183#section-2.3).</span>
+<span class="comment">// TODO: think about using private fields and smallvec</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ContentDisposition</span> {
     <span class="doccomment">/// The disposition type</span>
     <span class="kw">pub</span> <span class="ident">disposition</span>: <span class="ident">DispositionType</span>,
+
     <span class="doccomment">/// Disposition parameters</span>
     <span class="kw">pub</span> <span class="ident">parameters</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">DispositionParam</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ContentDisposition</span> {
     <span class="doccomment">/// Parse a raw Content-Disposition header value.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_raw</span>(<span class="ident">hv</span>: <span class="kw-2">&amp;</span><span class="ident">header::HeaderValue</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="kw">crate</span><span class="ident">::error::ParseError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_raw</span>(<span class="ident">hv</span>: <span class="kw-2">&amp;</span><span class="ident">header::HeaderValue</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="kw">crate</span>::error::ParseError</span><span class="op">&gt;</span> {
         <span class="comment">// `header::from_one_raw_str` invokes `hv.to_str` which assumes `hv` contains only visible</span>
         <span class="comment">//  ASCII characters. So `hv.as_bytes` is necessary here.</span>
         <span class="kw">let</span> <span class="ident">hv</span> <span class="op">=</span> <span class="ident">String::from_utf8</span>(<span class="ident">hv</span>.<span class="ident">as_bytes</span>().<span class="ident">to_vec</span>())
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="kw">crate</span><span class="ident">::error::ParseError::Header</span>)<span class="question-mark">?</span>;
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident"><span class="kw">crate</span>::error::ParseError::Header</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> (<span class="ident">disp_type</span>, <span class="kw-2">mut</span> <span class="ident">left</span>) <span class="op">=</span> <span class="ident">split_once_and_trim</span>(<span class="ident">hv</span>.<span class="ident">as_str</span>().<span class="ident">trim</span>(), <span class="string">&#39;;&#39;</span>);
         <span class="kw">if</span> <span class="ident">disp_type</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="kw">crate</span><span class="ident">::error::ParseError::Header</span>);
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::error::ParseError::Header</span>);
         }
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cd</span> <span class="op">=</span> <span class="ident">ContentDisposition</span> {
             <span class="ident">disposition</span>: <span class="ident">disp_type</span>.<span class="ident">into</span>(),
@@ -1292,8 +1320,8 @@
 
         <span class="kw">while</span> <span class="op">!</span><span class="ident">left</span>.<span class="ident">is_empty</span>() {
             <span class="kw">let</span> (<span class="ident">param_name</span>, <span class="ident">new_left</span>) <span class="op">=</span> <span class="ident">split_once_and_trim</span>(<span class="ident">left</span>, <span class="string">&#39;=&#39;</span>);
-            <span class="kw">if</span> <span class="ident">param_name</span>.<span class="ident">is_empty</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">param_name</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;*&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">new_left</span>.<span class="ident">is_empty</span>() {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="kw">crate</span><span class="ident">::error::ParseError::Header</span>);
+            <span class="kw">if</span> <span class="ident">param_name</span>.<span class="ident">is_empty</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">param_name</span> <span class="op">==</span> <span class="string">&quot;*&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">new_left</span>.<span class="ident">is_empty</span>() {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::error::ParseError::Header</span>);
             }
             <span class="ident">left</span> <span class="op">=</span> <span class="ident">new_left</span>;
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">param_name</span>) <span class="op">=</span> <span class="ident">param_name</span>.<span class="ident">strip_suffix</span>(<span class="string">&#39;*&#39;</span>) {
@@ -1311,7 +1339,7 @@
             } <span class="kw">else</span> {
                 <span class="comment">// regular parameters</span>
                 <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">left</span>.<span class="ident">starts_with</span>(<span class="string">&#39;\&quot;&#39;</span>) {
-                    <span class="comment">// quoted-string: defined in RFC6266 -&gt; RFC2616 Section 3.6</span>
+                    <span class="comment">// quoted-string: defined in RFC 6266 -&gt; RFC 2616 Section 3.6</span>
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">escaping</span> <span class="op">=</span> <span class="bool-val">false</span>;
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">quoted_string</span> <span class="op">=</span> <span class="macro">vec!</span>[];
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">end</span> <span class="op">=</span> <span class="prelude-val">None</span>;
@@ -1320,10 +1348,10 @@
                         <span class="kw">if</span> <span class="ident">escaping</span> {
                             <span class="ident">escaping</span> <span class="op">=</span> <span class="bool-val">false</span>;
                             <span class="ident">quoted_string</span>.<span class="ident">push</span>(<span class="ident">c</span>);
-                        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">c</span> <span class="op">=</span><span class="op">=</span> <span class="number">0x5c</span> {
+                        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">c</span> <span class="op">==</span> <span class="number">0x5c</span> {
                             <span class="comment">// backslash</span>
                             <span class="ident">escaping</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">c</span> <span class="op">=</span><span class="op">=</span> <span class="number">0x22</span> {
+                        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">c</span> <span class="op">==</span> <span class="number">0x22</span> {
                             <span class="comment">// double quote</span>
                             <span class="ident">end</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>); <span class="comment">// cuz skipped 1 for the leading quote</span>
                             <span class="kw">break</span>;
@@ -1331,18 +1359,18 @@
                             <span class="ident">quoted_string</span>.<span class="ident">push</span>(<span class="ident">c</span>);
                         }
                     }
-                    <span class="ident">left</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">left</span>[<span class="ident">end</span>.<span class="ident">ok_or</span>(<span class="kw">crate</span><span class="ident">::error::ParseError::Header</span>)<span class="question-mark">?</span> <span class="op">+</span> <span class="number">1</span>..];
+                    <span class="ident">left</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">left</span>[<span class="ident">end</span>.<span class="ident">ok_or</span>(<span class="ident"><span class="kw">crate</span>::error::ParseError::Header</span>)<span class="question-mark">?</span> <span class="op">+</span> <span class="number">1</span>..];
                     <span class="ident">left</span> <span class="op">=</span> <span class="ident">split_once</span>(<span class="ident">left</span>, <span class="string">&#39;;&#39;</span>).<span class="number">1</span>.<span class="ident">trim_start</span>();
                     <span class="comment">// In fact, it should not be Err if the above code is correct.</span>
                     <span class="ident">String::from_utf8</span>(<span class="ident">quoted_string</span>)
-                        .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="kw">crate</span><span class="ident">::error::ParseError::Header</span>)<span class="question-mark">?</span>
+                        .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident"><span class="kw">crate</span>::error::ParseError::Header</span>)<span class="question-mark">?</span>
                 } <span class="kw">else</span> {
                     <span class="comment">// token: won&#39;t contains semicolon according to RFC 2616 Section 2.2</span>
                     <span class="kw">let</span> (<span class="ident">token</span>, <span class="ident">new_left</span>) <span class="op">=</span> <span class="ident">split_once_and_trim</span>(<span class="ident">left</span>, <span class="string">&#39;;&#39;</span>);
                     <span class="ident">left</span> <span class="op">=</span> <span class="ident">new_left</span>;
                     <span class="kw">if</span> <span class="ident">token</span>.<span class="ident">is_empty</span>() {
                         <span class="comment">// quoted-string can be empty, but token cannot be empty</span>
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="kw">crate</span><span class="ident">::error::ParseError::Header</span>);
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::error::ParseError::Header</span>);
                     }
                     <span class="ident">token</span>.<span class="ident">to_owned</span>()
                 };
@@ -1362,23 +1390,23 @@
         <span class="prelude-val">Ok</span>(<span class="ident">cd</span>)
     }
 
-    <span class="doccomment">/// Returns `true` if it is [`Inline`](DispositionType::Inline).</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_inline</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="doccomment">/// Returns `true` if type is [`Inline`](DispositionType::Inline).</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_inline</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="macro">matches!</span>(<span class="self">self</span>.<span class="ident">disposition</span>, <span class="ident">DispositionType::Inline</span>)
     }
 
-    <span class="doccomment">/// Returns `true` if it is [`Attachment`](DispositionType::Attachment).</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_attachment</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="doccomment">/// Returns `true` if type is [`Attachment`](DispositionType::Attachment).</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_attachment</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="macro">matches!</span>(<span class="self">self</span>.<span class="ident">disposition</span>, <span class="ident">DispositionType::Attachment</span>)
     }
 
-    <span class="doccomment">/// Returns `true` if it is [`FormData`](DispositionType::FormData).</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_form_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="doccomment">/// Returns `true` if type is [`FormData`](DispositionType::FormData).</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_form_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="macro">matches!</span>(<span class="self">self</span>.<span class="ident">disposition</span>, <span class="ident">DispositionType::FormData</span>)
     }
 
-    <span class="doccomment">/// Returns `true` if it is [`Ext`](DispositionType::Ext) and the `disp_type` matches.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">disp_type</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="doccomment">/// Returns `true` if type is [`Ext`](DispositionType::Ext) and the `disp_type` matches.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">disp_type</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
         <span class="macro">matches!</span>(
             <span class="self">self</span>.<span class="ident">disposition</span>,
             <span class="ident">DispositionType::Ext</span>(<span class="kw-2">ref</span> <span class="ident">t</span>) <span class="kw">if</span> <span class="ident">t</span>.<span class="ident">eq_ignore_ascii_case</span>(<span class="ident">disp_type</span>.<span class="ident">as_ref</span>())
@@ -1386,85 +1414,79 @@
     }
 
     <span class="doccomment">/// Return the value of *name* if exists.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">parameters</span>.<span class="ident">iter</span>().<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_name</span>()).<span class="ident">next</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">parameters</span>.<span class="ident">iter</span>().<span class="ident">find_map</span>(<span class="ident">DispositionParam::as_name</span>)
     }
 
     <span class="doccomment">/// Return the value of *filename* if exists.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_filename</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_filename</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">parameters</span>
             .<span class="ident">iter</span>()
-            .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_filename</span>())
-            .<span class="ident">next</span>()
+            .<span class="ident">find_map</span>(<span class="ident">DispositionParam::as_filename</span>)
     }
 
     <span class="doccomment">/// Return the value of *filename\** if exists.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_filename_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">ExtendedValue</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_filename_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">ExtendedValue</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">parameters</span>
             .<span class="ident">iter</span>()
-            .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_filename_ext</span>())
-            .<span class="ident">next</span>()
+            .<span class="ident">find_map</span>(<span class="ident">DispositionParam::as_filename_ext</span>)
     }
 
     <span class="doccomment">/// Return the value of the parameter which the `name` matches.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_unknown</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_unknown</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">as_ref</span>();
-        <span class="self">self</span>.<span class="ident">parameters</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_unknown</span>(<span class="ident">name</span>))
-            .<span class="ident">next</span>()
+        <span class="self">self</span>.<span class="ident">parameters</span>.<span class="ident">iter</span>().<span class="ident">find_map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_unknown</span>(<span class="ident">name</span>))
     }
 
     <span class="doccomment">/// Return the value of the extended parameter which the `name` matches.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_unknown_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">ExtendedValue</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_unknown_ext</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">ExtendedValue</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">as_ref</span>();
-        <span class="self">self</span>.<span class="ident">parameters</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_unknown_ext</span>(<span class="ident">name</span>))
-            .<span class="ident">next</span>()
+        <span class="self">self</span>.<span class="ident">parameters</span>.<span class="ident">iter</span>().<span class="ident">find_map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_unknown_ext</span>(<span class="ident">name</span>))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">IntoHeaderValue</span> <span class="kw">for</span> <span class="ident">ContentDisposition</span> {
+<span class="kw">impl</span> <span class="ident">TryIntoHeaderValue</span> <span class="kw">for</span> <span class="ident">ContentDisposition</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">header::InvalidHeaderValue</span>;
 
-    <span class="kw">fn</span> <span class="ident">try_into_value</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">header::HeaderValue</span>, <span class="self">Self</span><span class="ident">::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">try_into_value</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">header::HeaderValue</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">Writer::new</span>();
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">writer</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>);
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">writer</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>);
         <span class="ident">header::HeaderValue::from_maybe_shared</span>(<span class="ident">writer</span>.<span class="ident">take</span>())
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Header</span> <span class="kw">for</span> <span class="ident">ContentDisposition</span> {
-    <span class="kw">fn</span> <span class="ident">name</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">header::HeaderName</span> {
+    <span class="kw">fn</span> <span class="ident">name</span>() -&gt; <span class="ident">header::HeaderName</span> {
         <span class="ident">header::CONTENT_DISPOSITION</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">parse</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="kw">crate</span><span class="ident">::HttpMessage</span><span class="op">&gt;</span>(<span class="ident">msg</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="kw">crate</span><span class="ident">::error::ParseError</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">h</span>) <span class="op">=</span> <span class="ident">msg</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">Self</span><span class="ident">::name</span>()) {
-            <span class="self">Self</span><span class="ident">::from_raw</span>(<span class="kw-2">&amp;</span><span class="ident">h</span>)
+    <span class="kw">fn</span> <span class="ident">parse</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident"><span class="kw">crate</span>::HttpMessage</span><span class="op">&gt;</span>(<span class="ident">msg</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="kw">crate</span>::error::ParseError</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">h</span>) <span class="op">=</span> <span class="ident">msg</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::name</span>()) {
+            <span class="ident"><span class="self">Self</span>::from_raw</span>(<span class="ident">h</span>)
         } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="kw">crate</span><span class="ident">::error::ParseError::Header</span>)
+            <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::error::ParseError::Header</span>)
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">DispositionType</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">DispositionType::Inline</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;inline&quot;</span>),
-            <span class="ident">DispositionType::Attachment</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;attachment&quot;</span>),
-            <span class="ident">DispositionType::FormData</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;form-data&quot;</span>),
-            <span class="ident">DispositionType::Ext</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>),
+            <span class="ident">DispositionType::Inline</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;inline&quot;</span>),
+            <span class="ident">DispositionType::Attachment</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;attachment&quot;</span>),
+            <span class="ident">DispositionType::FormData</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;form-data&quot;</span>),
+            <span class="ident">DispositionType::Ext</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>),
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">DispositionParam</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="comment">// All ASCII control characters (0-30, 127) including horizontal tab, double quote, and</span>
         <span class="comment">// backslash should be escaped in quoted-string (i.e. &quot;foobar&quot;).</span>
-        <span class="comment">// Ref: RFC6266 S4.1 -&gt; RFC2616 S3.6</span>
+        <span class="comment">//</span>
+        <span class="comment">// Ref: RFC 6266 §4.1 -&gt; RFC 2616 §3.6</span>
+        <span class="comment">//</span>
         <span class="comment">// filename-parm  = &quot;filename&quot; &quot;=&quot; value</span>
         <span class="comment">// value          = token | quoted-string</span>
         <span class="comment">// quoted-string  = ( &lt;&quot;&gt; *(qdtext | quoted-pair ) &lt;&quot;&gt; )</span>
@@ -1478,7 +1500,7 @@
         <span class="comment">// CTL            = &lt;any US-ASCII control character</span>
         <span class="comment">//                  (octets 0 - 31) and DEL (127)&gt;</span>
         <span class="comment">//</span>
-        <span class="comment">// Ref: RFC7578 S4.2 -&gt; RFC2183 S2 -&gt; RFC2045 S5.1</span>
+        <span class="comment">// Ref: RFC 7578 S4.2 -&gt; RFC 2183 S2 -&gt; RFC 2045 S5.1</span>
         <span class="comment">// parameter := attribute &quot;=&quot; value</span>
         <span class="comment">// attribute := token</span>
         <span class="comment">//              ; Matching of attributes</span>
@@ -1494,23 +1516,29 @@
         <span class="comment">//</span>
         <span class="comment">//</span>
         <span class="comment">// See also comments in test_from_raw_unnecessary_percent_decode.</span>
+
         <span class="kw">static</span> <span class="ident">RE</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">Regex</span><span class="op">&gt;</span> <span class="op">=</span>
             <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Regex::new</span>(<span class="string">&quot;[\x00-\x08\x10-\x1F\x7F\&quot;\\\\]&quot;</span>).<span class="ident">unwrap</span>());
+
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">DispositionParam::Name</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;name={}&quot;</span>, <span class="ident">value</span>),
-            <span class="ident">DispositionParam::Filename</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">DispositionParam::Name</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;name={}&quot;</span>, <span class="ident">value</span>),
+
+            <span class="ident">DispositionParam::Filename</span>(<span class="kw-2">ref</span> <span class="ident">value</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;filename=\&quot;{}\&quot;&quot;</span>, <span class="ident">RE</span>.<span class="ident">replace_all</span>(<span class="ident">value</span>, <span class="string">&quot;\\$0&quot;</span>).<span class="ident">as_ref</span>())
             }
-            <span class="ident">DispositionParam::Unknown</span>(<span class="kw-2">ref</span> <span class="ident">name</span>, <span class="kw-2">ref</span> <span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(
+
+            <span class="ident">DispositionParam::Unknown</span>(<span class="kw-2">ref</span> <span class="ident">name</span>, <span class="kw-2">ref</span> <span class="ident">value</span>) =&gt; <span class="macro">write!</span>(
                 <span class="ident">f</span>,
                 <span class="string">&quot;{}=\&quot;{}\&quot;&quot;</span>,
                 <span class="ident">name</span>,
                 <span class="kw-2">&amp;</span><span class="ident">RE</span>.<span class="ident">replace_all</span>(<span class="ident">value</span>, <span class="string">&quot;\\$0&quot;</span>).<span class="ident">as_ref</span>()
             ),
-            <span class="ident">DispositionParam::FilenameExt</span>(<span class="kw-2">ref</span> <span class="ident">ext_value</span>) <span class="op">=</span><span class="op">&gt;</span> {
+
+            <span class="ident">DispositionParam::FilenameExt</span>(<span class="kw-2">ref</span> <span class="ident">ext_value</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;filename*={}&quot;</span>, <span class="ident">ext_value</span>)
             }
-            <span class="ident">DispositionParam::UnknownExt</span>(<span class="kw-2">ref</span> <span class="ident">name</span>, <span class="kw-2">ref</span> <span class="ident">ext_value</span>) <span class="op">=</span><span class="op">&gt;</span> {
+
+            <span class="ident">DispositionParam::UnknownExt</span>(<span class="kw-2">ref</span> <span class="ident">name</span>, <span class="kw-2">ref</span> <span class="ident">ext_value</span>) =&gt; {
                 <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}*={}&quot;</span>, <span class="ident">name</span>, <span class="ident">ext_value</span>)
             }
         }
@@ -1518,7 +1546,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">ContentDisposition</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">disposition</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">parameters</span>
             .<span class="ident">iter</span>()
@@ -1529,7 +1557,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ContentDisposition</span>, <span class="ident">DispositionParam</span>, <span class="ident">DispositionType</span>};
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::http::header</span>::{<span class="ident">Charset</span>, <span class="ident">ExtendedValue</span>, <span class="ident">HeaderValue</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::header</span>::{<span class="ident">Charset</span>, <span class="ident">ExtendedValue</span>, <span class="ident">HeaderValue</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_from_raw_basic</span>() {
@@ -1717,7 +1745,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">from_raw_with_unicode</span>() {
-        <span class="comment">/* RFC7578 Section 4.2:
+        <span class="comment">/* RFC 7578 Section 4.2:
         Some commonly deployed systems use multipart/form-data with file names directly encoded
         including octets outside the US-ASCII range. The encoding used for the file names is
         typically UTF-8, although HTML forms will use the charset associated with the form.
@@ -1790,9 +1818,9 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_from_raw_unnecessary_percent_decode</span>() {
-        <span class="comment">// In fact, RFC7578 (multipart/form-data) Section 2 and 4.2 suggests that filename with</span>
+        <span class="comment">// In fact, RFC 7578 (multipart/form-data) Section 2 and 4.2 suggests that filename with</span>
         <span class="comment">// non-ASCII characters MAY be percent-encoded.</span>
-        <span class="comment">// On the contrary, RFC6266 or other RFCs related to Content-Disposition response header</span>
+        <span class="comment">// On the contrary, RFC 6266 or other RFCs related to Content-Disposition response header</span>
         <span class="comment">// do not mention such percent-encoding.</span>
         <span class="comment">// So, it appears to be undecidable whether to percent-decode or not without</span>
         <span class="comment">// knowing the usage scenario (multipart/form-data v.s. HTTP response header) and</span>
@@ -1950,6 +1978,6 @@
         <span class="macro">assert_eq!</span>(<span class="ident">cd</span>.<span class="ident">get_unknown</span>(<span class="string">&quot;duMMy&quot;</span>), <span class="prelude-val">Some</span>(<span class="string">&quot;3&quot;</span>));
     }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-search-index-js="../../../../search-index.js" data-search-js="../../../../search.js"></div>
-    <script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script></body></html>
+</code></pre></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (83b15bfe1 2021-12-28)" ></div>
+</body></html>

@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["awc"] = [{"text":"impl&lt;S&gt; <a class=\"trait\" href=\"actix_http/http_message/trait.HttpMessage.html\" title=\"trait actix_http::http_message::HttpMessage\">HttpMessage</a> for <a class=\"struct\" href=\"awc/struct.ClientResponse.html\" title=\"struct awc::ClientResponse\">ClientResponse</a>&lt;S&gt;","synthetic":false,"types":["awc::response::ClientResponse"]}];
+implementors["awc"] = [{"text":"impl&lt;S&gt; <a class=\"trait\" href=\"actix_http/http_message/trait.HttpMessage.html\" title=\"trait actix_http::http_message::HttpMessage\">HttpMessage</a> for <a class=\"struct\" href=\"awc/struct.ClientResponse.html\" title=\"struct awc::ClientResponse\">ClientResponse</a>&lt;S&gt;","synthetic":false,"types":["awc::responses::response::ClientResponse"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

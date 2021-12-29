@@ -1,7 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `actix-web-actors/src/ws.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ws.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../actix_web_actors/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `actix-web-actors&#x2F;src&#x2F;ws.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ws.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../actix_web_actors/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../actix_web_actors/index.html"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -789,42 +788,417 @@
 <span id="786">786</span>
 <span id="787">787</span>
 <span id="788">788</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! Websocket integration.</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
+<span id="919">919</span>
+<span id="920">920</span>
+<span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
+<span id="925">925</span>
+<span id="926">926</span>
+<span id="927">927</span>
+<span id="928">928</span>
+<span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
+<span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
+<span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
+<span id="979">979</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Websocket integration.</span>
 
-<span class="kw">use</span> <span class="ident">std::future::Future</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
-<span class="kw">use</span> <span class="ident">std::pin::Pin</span>;
-<span class="kw">use</span> <span class="ident">std::task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::VecDeque</span>, <span class="ident">convert::TryFrom</span>};
-
-<span class="kw">use</span> <span class="ident">actix::dev</span>::{
-    <span class="ident">AsyncContextParts</span>, <span class="ident">ContextFut</span>, <span class="ident">ContextParts</span>, <span class="ident">Envelope</span>, <span class="ident">Mailbox</span>, <span class="ident">StreamHandler</span>, <span class="ident">ToEnvelope</span>,
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">collections::VecDeque</span>,
+    <span class="ident">convert::TryFrom</span>,
+    <span class="ident">future::Future</span>,
+    <span class="ident">io</span>, <span class="ident">mem</span>,
+    <span class="ident">pin::Pin</span>,
+    <span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>},
 };
-<span class="kw">use</span> <span class="ident">actix::fut::ActorFuture</span>;
+
 <span class="kw">use</span> <span class="ident">actix</span>::{
+    <span class="ident">dev</span>::{
+        <span class="ident">AsyncContextParts</span>, <span class="ident">ContextFut</span>, <span class="ident">ContextParts</span>, <span class="ident">Envelope</span>, <span class="ident">Mailbox</span>, <span class="ident">StreamHandler</span>,
+        <span class="ident">ToEnvelope</span>,
+    },
+    <span class="ident">fut::ActorFuture</span>,
     <span class="ident">Actor</span>, <span class="ident">ActorContext</span>, <span class="ident">ActorState</span>, <span class="ident">Addr</span>, <span class="ident">AsyncContext</span>, <span class="ident">Handler</span>, <span class="ident">Message</span> <span class="kw">as</span> <span class="ident">ActixMessage</span>,
     <span class="ident">SpawnHandle</span>,
 };
-<span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">Decoder</span>, <span class="ident">Encoder</span>};
+<span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">Decoder</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">Encoder</span> <span class="kw">as</span> <span class="kw">_</span>};
+<span class="kw">use</span> <span class="ident">actix_http::ws</span>::{<span class="ident">hash_key</span>, <span class="ident">Codec</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_http::ws</span>::{
     <span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">Frame</span>, <span class="ident">HandshakeError</span>, <span class="ident">Message</span>, <span class="ident">ProtocolError</span>,
 };
-<span class="kw">use</span> <span class="ident">actix_http</span>::{
-    <span class="ident">http::HeaderValue</span>,
-    <span class="ident">ws</span>::{<span class="ident">hash_key</span>, <span class="ident">Codec</span>},
+<span class="kw">use</span> <span class="ident">actix_web</span>::{
+    <span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">PayloadError</span>},
+    <span class="ident">http</span>::{
+        <span class="ident">header</span>::{<span class="self">self</span>, <span class="ident">HeaderValue</span>},
+        <span class="ident">Method</span>, <span class="ident">StatusCode</span>,
+    },
+    <span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>, <span class="ident">HttpResponseBuilder</span>,
 };
-<span class="kw">use</span> <span class="ident">actix_web::error</span>::{<span class="ident">Error</span>, <span class="ident">PayloadError</span>};
-<span class="kw">use</span> <span class="ident">actix_web::http</span>::{<span class="ident">header</span>, <span class="ident">Method</span>, <span class="ident">StatusCode</span>};
-<span class="kw">use</span> <span class="ident">actix_web::HttpResponseBuilder</span>;
-<span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">HttpRequest</span>, <span class="ident">HttpResponse</span>};
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
 <span class="kw">use</span> <span class="ident">bytestring::ByteString</span>;
 <span class="kw">use</span> <span class="ident">futures_core::Stream</span>;
-<span class="kw">use</span> <span class="ident">tokio::sync::oneshot::Sender</span>;
+<span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
+<span class="kw">use</span> <span class="ident">tokio::sync::oneshot</span>;
+
+<span class="doccomment">/// Builder for Websocket session response.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Create a Websocket session response with default configuration.</span>
+<span class="doccomment">/// ```ignore</span>
+<span class="doccomment">/// WsResponseBuilder::new(WsActor, &amp;req, stream).start()</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Create a Websocket session with a specific max frame size, [`Codec`], and protocols.</span>
+<span class="doccomment">/// ```ignore</span>
+<span class="doccomment">/// const MAX_FRAME_SIZE: usize = 16_384; // 16KiB</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ws::WsResponseBuilder::new(WsActor, &amp;req, stream)</span>
+<span class="doccomment">///     .codec(Codec::new())</span>
+<span class="doccomment">///     .protocols(&amp;[&quot;A&quot;, &quot;B&quot;])</span>
+<span class="doccomment">///     .frame_size(MAX_FRAME_SIZE)</span>
+<span class="doccomment">///     .start()</span>
+<span class="doccomment">/// ```</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">WsResponseBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="ident">WebsocketContext</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">T</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+{
+    <span class="ident">actor</span>: <span class="ident">A</span>,
+    <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HttpRequest</span>,
+    <span class="ident">stream</span>: <span class="ident">T</span>,
+    <span class="ident">codec</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Codec</span><span class="op">&gt;</span>,
+    <span class="ident">protocols</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>]<span class="op">&gt;</span>,
+    <span class="ident">frame_size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">WsResponseBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="ident">WebsocketContext</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">T</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+{
+    <span class="doccomment">/// Construct a new `WsResponseBuilder` with actor, request, and payload stream.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// For usage example, see docs on [`WsResponseBuilder`] struct.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">actor</span>: <span class="ident">A</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HttpRequest</span>, <span class="ident">stream</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident">WsResponseBuilder</span> {
+            <span class="ident">actor</span>,
+            <span class="ident">req</span>,
+            <span class="ident">stream</span>,
+            <span class="ident">codec</span>: <span class="prelude-val">None</span>,
+            <span class="ident">protocols</span>: <span class="prelude-val">None</span>,
+            <span class="ident">frame_size</span>: <span class="prelude-val">None</span>,
+        }
+    }
+
+    <span class="doccomment">/// Set the protocols for the session.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">protocols</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">protocols</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>]) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">protocols</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">protocols</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Set the max frame size for each message (in bytes).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// **Note**: This will override any given [`Codec`]&#39;s max frame size.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frame_size</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">frame_size</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">frame_size</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">frame_size</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Set the [`Codec`] for the session. If [`Self::frame_size`] is also set, the given</span>
+    <span class="doccomment">/// [`Codec`]&#39;s max frame size will be overridden.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">codec</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">codec</span>: <span class="ident">Codec</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">codec</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">codec</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">handshake_resp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponseBuilder</span>, <span class="ident">HandshakeError</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">protocols</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">protocols</span>) =&gt; <span class="ident">handshake_with_protocols</span>(<span class="self">self</span>.<span class="ident">req</span>, <span class="ident">protocols</span>),
+            <span class="prelude-val">None</span> =&gt; <span class="ident">handshake</span>(<span class="self">self</span>.<span class="ident">req</span>),
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">set_frame_size</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">frame_size</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">frame_size</span> {
+            <span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">codec</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">codec</span>) =&gt; {
+                    <span class="comment">// modify existing codec&#39;s max frame size</span>
+                    <span class="kw">let</span> <span class="ident">orig_codec</span> <span class="op">=</span> <span class="ident">mem::take</span>(<span class="ident">codec</span>);
+                    <span class="kw-2">*</span><span class="ident">codec</span> <span class="op">=</span> <span class="ident">orig_codec</span>.<span class="ident">max_size</span>(<span class="ident">frame_size</span>);
+                }
+
+                <span class="prelude-val">None</span> =&gt; {
+                    <span class="comment">// create a new codec with the given size</span>
+                    <span class="self">self</span>.<span class="ident">codec</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Codec::new</span>().<span class="ident">max_size</span>(<span class="ident">frame_size</span>));
+                }
+            }
+        }
+    }
+
+    <span class="doccomment">/// Create a new Websocket context from an actor, request stream, and codec.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns a pair, where the first item is an addr for the created actor, and the second item</span>
+    <span class="doccomment">/// is a stream intended to be set as part of the response</span>
+    <span class="doccomment">/// via [`HttpResponseBuilder::streaming()`].</span>
+    <span class="kw">fn</span> <span class="ident">create_with_codec_addr</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(
+        <span class="ident">actor</span>: <span class="ident">A</span>,
+        <span class="ident">stream</span>: <span class="ident">S</span>,
+        <span class="ident">codec</span>: <span class="ident">Codec</span>,
+    ) -&gt; (<span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>)
+    <span class="kw">where</span>
+        <span class="ident">A</span>: <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    {
+        <span class="kw">let</span> <span class="ident">mb</span> <span class="op">=</span> <span class="ident">Mailbox::default</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ctx</span> <span class="op">=</span> <span class="ident">WebsocketContext</span> {
+            <span class="ident">inner</span>: <span class="ident">ContextParts::new</span>(<span class="ident">mb</span>.<span class="ident">sender_producer</span>()),
+            <span class="ident">messages</span>: <span class="ident">VecDeque::new</span>(),
+        };
+        <span class="ident">ctx</span>.<span class="ident">add_stream</span>(<span class="ident">WsStream::new</span>(<span class="ident">stream</span>, <span class="ident">codec</span>.<span class="ident">clone</span>()));
+
+        <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">address</span>();
+
+        (<span class="ident">addr</span>, <span class="ident">WebsocketContextFut::new</span>(<span class="ident">ctx</span>, <span class="ident">actor</span>, <span class="ident">mb</span>, <span class="ident">codec</span>))
+    }
+
+    <span class="doccomment">/// Perform WebSocket handshake and start actor.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `req` is an [`HttpRequest`] that should be requesting a websocket protocol change.</span>
+    <span class="doccomment">/// `stream` should be a [`Bytes`] stream (such as `actix_web::web::Payload`) that contains a</span>
+    <span class="doccomment">/// stream of the body request.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If there is a problem with the handshake, an error is returned.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If successful, consume the [`WsResponseBuilder`] and return a [`HttpResponse`] wrapped in</span>
+    <span class="doccomment">/// a [`Result`].</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">handshake_resp</span>()<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">set_frame_size</span>();
+
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">codec</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">codec</span>) =&gt; {
+                <span class="kw">let</span> <span class="ident">out_stream</span> <span class="op">=</span> <span class="ident">WebsocketContext::with_codec</span>(<span class="self">self</span>.<span class="ident">actor</span>, <span class="self">self</span>.<span class="ident">stream</span>, <span class="ident">codec</span>);
+                <span class="prelude-val">Ok</span>(<span class="ident">res</span>.<span class="ident">streaming</span>(<span class="ident">out_stream</span>))
+            }
+            <span class="prelude-val">None</span> =&gt; {
+                <span class="kw">let</span> <span class="ident">out_stream</span> <span class="op">=</span> <span class="ident">WebsocketContext::create</span>(<span class="self">self</span>.<span class="ident">actor</span>, <span class="self">self</span>.<span class="ident">stream</span>);
+                <span class="prelude-val">Ok</span>(<span class="ident">res</span>.<span class="ident">streaming</span>(<span class="ident">out_stream</span>))
+            }
+        }
+    }
+
+    <span class="doccomment">/// Perform WebSocket handshake and start actor.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `req` is an [`HttpRequest`] that should be requesting a websocket protocol change.</span>
+    <span class="doccomment">/// `stream` should be a [`Bytes`] stream (such as `actix_web::web::Payload`) that contains a</span>
+    <span class="doccomment">/// stream of the body request.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If there is a problem with the handshake, an error is returned.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If successful, returns a pair where the first item is an address for the created actor and</span>
+    <span class="doccomment">/// the second item is the [`HttpResponse`] that should be returned from the websocket request.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start_with_addr</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="ident">HttpResponse</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">handshake_resp</span>()<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">set_frame_size</span>();
+
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">codec</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">codec</span>) =&gt; {
+                <span class="kw">let</span> (<span class="ident">addr</span>, <span class="ident">out_stream</span>) <span class="op">=</span>
+                    <span class="ident"><span class="self">Self</span>::create_with_codec_addr</span>(<span class="self">self</span>.<span class="ident">actor</span>, <span class="self">self</span>.<span class="ident">stream</span>, <span class="ident">codec</span>);
+                <span class="prelude-val">Ok</span>((<span class="ident">addr</span>, <span class="ident">res</span>.<span class="ident">streaming</span>(<span class="ident">out_stream</span>)))
+            }
+            <span class="prelude-val">None</span> =&gt; {
+                <span class="kw">let</span> (<span class="ident">addr</span>, <span class="ident">out_stream</span>) <span class="op">=</span>
+                    <span class="ident">WebsocketContext::create_with_addr</span>(<span class="self">self</span>.<span class="ident">actor</span>, <span class="self">self</span>.<span class="ident">stream</span>);
+                <span class="prelude-val">Ok</span>((<span class="ident">addr</span>, <span class="ident">res</span>.<span class="ident">streaming</span>(<span class="ident">out_stream</span>)))
+            }
+        }
+    }
+}
 
 <span class="doccomment">/// Perform WebSocket handshake and start actor.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">actor</span>: <span class="ident">A</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="ident">stream</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// To customize options, see [`WsResponseBuilder`].</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">actor</span>: <span class="ident">A</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="ident">stream</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="ident">WebsocketContext</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -835,20 +1209,20 @@
 
 <span class="doccomment">/// Perform WebSocket handshake and start actor.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// `req` is an HTTP Request that should be requesting a websocket protocol</span>
-<span class="doccomment">/// change. `stream` should be a `Bytes` stream (such as</span>
-<span class="doccomment">/// `actix_web::web::Payload`) that contains a stream of the body request.</span>
+<span class="doccomment">/// `req` is an HTTP Request that should be requesting a websocket protocol change. `stream` should</span>
+<span class="doccomment">/// be a `Bytes` stream (such as `actix_web::web::Payload`) that contains a stream of the</span>
+<span class="doccomment">/// body request.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// If there is a problem with the handshake, an error is returned.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// If successful, returns a pair where the first item is an address for the</span>
-<span class="doccomment">/// created actor and the second item is the response that should be returned</span>
-<span class="doccomment">/// from the WebSocket request.</span>
+<span class="doccomment">/// If successful, returns a pair where the first item is an address for the created actor and the</span>
+<span class="doccomment">/// second item is the response that should be returned from the WebSocket request.</span>
+<span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Prefer `WsResponseBuilder::start_with_addr`.&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start_with_addr</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(
     <span class="ident">actor</span>: <span class="ident">A</span>,
     <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>,
     <span class="ident">stream</span>: <span class="ident">T</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="ident">HttpResponse</span>), <span class="ident">Error</span><span class="op">&gt;</span>
+) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="ident">HttpResponse</span>), <span class="ident">Error</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="ident">WebsocketContext</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -861,12 +1235,16 @@
 <span class="doccomment">/// Do WebSocket handshake and start ws actor.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// `protocols` is a sequence of known protocols.</span>
+<span class="attribute">#[<span class="ident">deprecated</span>(
+    <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>,
+    <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Prefer `WsResponseBuilder` for setting protocols.&quot;</span>
+)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start_with_protocols</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">T</span><span class="op">&gt;</span>(
     <span class="ident">actor</span>: <span class="ident">A</span>,
     <span class="ident">protocols</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
     <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>,
     <span class="ident">stream</span>: <span class="ident">T</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="ident">WebsocketContext</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">T</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -877,24 +1255,23 @@
 
 <span class="doccomment">/// Prepare WebSocket handshake response.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This function returns handshake `HttpResponse`, ready to send to peer.</span>
-<span class="doccomment">/// It does not perform any IO.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handshake</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponseBuilder</span>, <span class="ident">HandshakeError</span><span class="op">&gt;</span> {
+<span class="doccomment">/// This function returns handshake `HttpResponse`, ready to send to peer. It does not perform</span>
+<span class="doccomment">/// any IO.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handshake</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponseBuilder</span>, <span class="ident">HandshakeError</span><span class="op">&gt;</span> {
     <span class="ident">handshake_with_protocols</span>(<span class="ident">req</span>, <span class="kw-2">&amp;</span>[])
 }
 
 <span class="doccomment">/// Prepare WebSocket handshake response.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This function returns handshake `HttpResponse`, ready to send to peer.</span>
-<span class="doccomment">/// It does not perform any IO.</span>
+<span class="doccomment">/// This function returns handshake `HttpResponse`, ready to send to peer. It does not perform</span>
+<span class="doccomment">/// any IO.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// `protocols` is a sequence of known protocols. On successful handshake,</span>
-<span class="doccomment">/// the returned response headers contain the first protocol in this list</span>
-<span class="doccomment">/// which the server also knows.</span>
+<span class="doccomment">/// `protocols` is a sequence of known protocols. On successful handshake, the returned response</span>
+<span class="doccomment">/// headers contain the first protocol in this list which the server also knows.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handshake_with_protocols</span>(
     <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>,
     <span class="ident">protocols</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponseBuilder</span>, <span class="ident">HandshakeError</span><span class="op">&gt;</span> {
+) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponseBuilder</span>, <span class="ident">HandshakeError</span><span class="op">&gt;</span> {
     <span class="comment">// WebSocket accepts only GET</span>
     <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">req</span>.<span class="ident">method</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">Method::GET</span> {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">HandshakeError::GetMethodRequired</span>);
@@ -925,7 +1302,7 @@
     }
     <span class="kw">let</span> <span class="ident">supported_ver</span> <span class="op">=</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">hdr</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header::SEC_WEBSOCKET_VERSION</span>) {
-            <span class="ident">hdr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;13&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">hdr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;8&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">hdr</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;7&quot;</span>
+            <span class="ident">hdr</span> <span class="op">==</span> <span class="string">&quot;13&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">hdr</span> <span class="op">==</span> <span class="string">&quot;8&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">hdr</span> <span class="op">==</span> <span class="string">&quot;7&quot;</span>
         } <span class="kw">else</span> {
             <span class="bool-val">false</span>
         }
@@ -952,7 +1329,7 @@
                 <span class="ident">req_protocols</span>
                     .<span class="ident">split</span>(<span class="string">&#39;,&#39;</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">req_p</span><span class="op">|</span> <span class="ident">req_p</span>.<span class="ident">trim</span>())
-                    .<span class="ident">find</span>(<span class="op">|</span><span class="ident">req_p</span><span class="op">|</span> <span class="ident">protocols</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span> <span class="op">=</span><span class="op">=</span> <span class="ident">req_p</span>))
+                    .<span class="ident">find</span>(<span class="op">|</span><span class="ident">req_p</span><span class="op">|</span> <span class="ident">protocols</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span> <span class="op">==</span> <span class="ident">req_p</span>))
             });
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">HttpResponse::build</span>(<span class="ident">StatusCode::SWITCHING_PROTOCOLS</span>)
@@ -984,15 +1361,15 @@
 <span class="kw">where</span>
     <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="self">Self</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">stop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">stop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">stop</span>();
     }
 
-    <span class="kw">fn</span> <span class="ident">terminate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">terminate</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">terminate</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ActorState</span> {
+    <span class="kw">fn</span> <span class="ident">state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ActorState</span> {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">state</span>()
     }
 }
@@ -1001,14 +1378,14 @@
 <span class="kw">where</span>
     <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="self">Self</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">spawn</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">fut</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SpawnHandle</span>
+    <span class="kw">fn</span> <span class="ident">spawn</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fut</span>: <span class="ident">F</span>) -&gt; <span class="ident">SpawnHandle</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">ActorFuture</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">Output</span> <span class="op">=</span> ()<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">spawn</span>(<span class="ident">fut</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">wait</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">fut</span>: <span class="ident">F</span>)
+    <span class="kw">fn</span> <span class="ident">wait</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">fut</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">ActorFuture</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">Output</span> <span class="op">=</span> ()<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
@@ -1017,18 +1394,18 @@
 
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">waiting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">waiting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">waiting</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">state</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">ActorState::Stopping</span>
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">state</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">ActorState::Stopped</span>
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">state</span>() <span class="op">==</span> <span class="ident">ActorState::Stopping</span>
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">state</span>() <span class="op">==</span> <span class="ident">ActorState::Stopped</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">cancel_future</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">handle</span>: <span class="ident">SpawnHandle</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">cancel_future</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">handle</span>: <span class="ident">SpawnHandle</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">cancel_future</span>(<span class="ident">handle</span>)
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">address</span>()
     }
 }
@@ -1037,9 +1414,9 @@
 <span class="kw">where</span>
     <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="self">Self</span><span class="op">&gt;</span>,
 {
+    <span class="doccomment">/// Create a new Websocket context from a request and an actor.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="doccomment">/// Create a new Websocket context from a request and an actor</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">actor</span>: <span class="ident">A</span>, <span class="ident">stream</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">actor</span>: <span class="ident">A</span>, <span class="ident">stream</span>: <span class="ident">S</span>) -&gt; <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">A</span>: <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -1048,16 +1425,15 @@
         <span class="ident">stream</span>
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Create a new Websocket context from a request and an actor.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns a pair, where the first item is an addr for the created actor,</span>
-    <span class="doccomment">/// and the second item is a stream intended to be set as part of the</span>
-    <span class="doccomment">/// response via `HttpResponseBuilder::streaming()`.</span>
+    <span class="doccomment">/// Returns a pair, where the first item is an addr for the created actor, and the second item</span>
+    <span class="doccomment">/// is a stream intended to be set as part of the response</span>
+    <span class="doccomment">/// via [`HttpResponseBuilder::streaming()`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_with_addr</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(
         <span class="ident">actor</span>: <span class="ident">A</span>,
         <span class="ident">stream</span>: <span class="ident">S</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>)
+    ) -&gt; (<span class="ident">Addr</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>)
     <span class="kw">where</span>
         <span class="ident">A</span>: <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -1074,13 +1450,12 @@
         (<span class="ident">addr</span>, <span class="ident">WebsocketContextFut::new</span>(<span class="ident">ctx</span>, <span class="ident">actor</span>, <span class="ident">mb</span>, <span class="ident">Codec::new</span>()))
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Create a new Websocket context from a request, an actor, and a codec</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_codec</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(
         <span class="ident">actor</span>: <span class="ident">A</span>,
         <span class="ident">stream</span>: <span class="ident">S</span>,
         <span class="ident">codec</span>: <span class="ident">Codec</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    ) -&gt; <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">A</span>: <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -1090,15 +1465,15 @@
             <span class="ident">inner</span>: <span class="ident">ContextParts::new</span>(<span class="ident">mb</span>.<span class="ident">sender_producer</span>()),
             <span class="ident">messages</span>: <span class="ident">VecDeque::new</span>(),
         };
-        <span class="ident">ctx</span>.<span class="ident">add_stream</span>(<span class="ident">WsStream::new</span>(<span class="ident">stream</span>, <span class="ident">codec</span>));
+        <span class="ident">ctx</span>.<span class="ident">add_stream</span>(<span class="ident">WsStream::new</span>(<span class="ident">stream</span>, <span class="ident">codec</span>.<span class="ident">clone</span>()));
 
         <span class="ident">WebsocketContextFut::new</span>(<span class="ident">ctx</span>, <span class="ident">actor</span>, <span class="ident">mb</span>, <span class="ident">codec</span>)
     }
 
     <span class="doccomment">/// Create a new Websocket context</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_factory</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">stream</span>: <span class="ident">S</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_factory</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">stream</span>: <span class="ident">S</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="kw">impl</span> <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">A</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="self">Self</span>) -&gt; <span class="ident">A</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">A</span>: <span class="ident">StreamHandler</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
@@ -1109,7 +1484,7 @@
         };
         <span class="ident">ctx</span>.<span class="ident">add_stream</span>(<span class="ident">WsStream::new</span>(<span class="ident">stream</span>, <span class="ident">Codec::new</span>()));
 
-        <span class="kw">let</span> <span class="ident">act</span> <span class="op">=</span> <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
+        <span class="kw">let</span> <span class="ident">act</span> <span class="op">=</span> <span class="ident">f</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ctx</span>);
 
         <span class="ident">WebsocketContextFut::new</span>(<span class="ident">ctx</span>, <span class="ident">act</span>, <span class="ident">mb</span>, <span class="ident">Codec::new</span>())
     }
@@ -1126,51 +1501,51 @@
     <span class="doccomment">/// data you should prefer the `text()` or `binary()` convenience functions</span>
     <span class="doccomment">/// that handle the framing for you.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_raw</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">msg</span>: <span class="ident">Message</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_raw</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">msg</span>: <span class="ident">Message</span>) {
         <span class="self">self</span>.<span class="ident">messages</span>.<span class="ident">push_back</span>(<span class="prelude-val">Some</span>(<span class="ident">msg</span>));
     }
 
     <span class="doccomment">/// Send text frame</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">text</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">text</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">ByteString</span><span class="op">&gt;</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">text</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">text</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">ByteString</span><span class="op">&gt;</span>) {
         <span class="self">self</span>.<span class="ident">write_raw</span>(<span class="ident">Message::Text</span>(<span class="ident">text</span>.<span class="ident">into</span>()));
     }
 
     <span class="doccomment">/// Send binary frame</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">binary</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">binary</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>) {
         <span class="self">self</span>.<span class="ident">write_raw</span>(<span class="ident">Message::Binary</span>(<span class="ident">data</span>.<span class="ident">into</span>()));
     }
 
     <span class="doccomment">/// Send ping frame</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ping</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">message</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ping</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">message</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) {
         <span class="self">self</span>.<span class="ident">write_raw</span>(<span class="ident">Message::Ping</span>(<span class="ident">Bytes::copy_from_slice</span>(<span class="ident">message</span>)));
     }
 
     <span class="doccomment">/// Send pong frame</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pong</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">message</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pong</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">message</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) {
         <span class="self">self</span>.<span class="ident">write_raw</span>(<span class="ident">Message::Pong</span>(<span class="ident">Bytes::copy_from_slice</span>(<span class="ident">message</span>)));
     }
 
     <span class="doccomment">/// Send close frame</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">close</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloseReason</span><span class="op">&gt;</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">close</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloseReason</span><span class="op">&gt;</span>) {
         <span class="self">self</span>.<span class="ident">write_raw</span>(<span class="ident">Message::Close</span>(<span class="ident">reason</span>));
     }
 
     <span class="doccomment">/// Handle of the running future</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// SpawnHandle is the handle returned by `AsyncContext::spawn()` method.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SpawnHandle</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">SpawnHandle</span> {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">curr_handle</span>()
     }
 
     <span class="doccomment">/// Set mailbox capacity</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default mailbox capacity is 16 messages.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_mailbox_capacity</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cap</span>: <span class="ident">usize</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_mailbox_capacity</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">cap</span>: <span class="ident">usize</span>) {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">set_mailbox_capacity</span>(<span class="ident">cap</span>)
     }
 }
@@ -1179,8 +1554,8 @@
 <span class="kw">where</span>
     <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="self">Self</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ContextParts</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> {
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">inner</span>
+    <span class="kw">fn</span> <span class="ident">parts</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">ContextParts</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> {
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">inner</span>
     }
 }
 
@@ -1198,7 +1573,7 @@
 <span class="kw">where</span>
     <span class="ident">A</span>: <span class="ident">Actor</span><span class="op">&lt;</span><span class="ident">Context</span> <span class="op">=</span> <span class="ident">WebsocketContext</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ctx</span>: <span class="ident">WebsocketContext</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="ident">act</span>: <span class="ident">A</span>, <span class="ident">mailbox</span>: <span class="ident">Mailbox</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="ident">codec</span>: <span class="ident">Codec</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ctx</span>: <span class="ident">WebsocketContext</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="ident">act</span>: <span class="ident">A</span>, <span class="ident">mailbox</span>: <span class="ident">Mailbox</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>, <span class="ident">codec</span>: <span class="ident">Codec</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">fut</span> <span class="op">=</span> <span class="ident">ContextFut::new</span>(<span class="ident">ctx</span>, <span class="ident">act</span>, <span class="ident">mailbox</span>);
         <span class="ident">WebsocketContextFut</span> {
             <span class="ident">fut</span>,
@@ -1215,17 +1590,17 @@
 {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span>();
 
         <span class="kw">if</span> <span class="ident">this</span>.<span class="ident">fut</span>.<span class="ident">alive</span>() {
-            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">fut</span>).<span class="ident">poll</span>(<span class="ident">cx</span>);
+            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">this</span>.<span class="ident">fut</span>).<span class="ident">poll</span>(<span class="ident">cx</span>);
         }
 
         <span class="comment">// encode messages</span>
         <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">fut</span>.<span class="ident">ctx</span>().<span class="ident">messages</span>.<span class="ident">pop_front</span>() {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">msg</span>) <span class="op">=</span> <span class="ident">item</span> {
-                <span class="ident">this</span>.<span class="ident">encoder</span>.<span class="ident">encode</span>(<span class="ident">msg</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">buf</span>)<span class="question-mark">?</span>;
+                <span class="ident">this</span>.<span class="ident">encoder</span>.<span class="ident">encode</span>(<span class="ident">msg</span>, <span class="kw-2">&amp;mut</span> <span class="ident">this</span>.<span class="ident">buf</span>)<span class="question-mark">?</span>;
             } <span class="kw">else</span> {
                 <span class="ident">this</span>.<span class="ident">closed</span> <span class="op">=</span> <span class="bool-val">true</span>;
                 <span class="kw">break</span>;
@@ -1248,25 +1623,27 @@
     <span class="ident">M</span>: <span class="ident">ActixMessage</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">M::Result</span>: <span class="ident">Send</span>,
 {
-    <span class="kw">fn</span> <span class="ident">pack</span>(<span class="ident">msg</span>: <span class="ident">M</span>, <span class="ident">tx</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">M::Result</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Envelope</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">pack</span>(<span class="ident">msg</span>: <span class="ident">M</span>, <span class="ident">tx</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">oneshot::Sender</span><span class="op">&lt;</span><span class="ident">M::Result</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">Envelope</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> {
         <span class="ident">Envelope::new</span>(<span class="ident">msg</span>, <span class="ident">tx</span>)
     }
 }
 
-<span class="attribute">#[<span class="ident">pin_project::pin_project</span>]</span>
-<span class="kw">struct</span> <span class="ident">WsStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
-    <span class="attribute">#[<span class="ident">pin</span>]</span>
-    <span class="ident">stream</span>: <span class="ident">S</span>,
-    <span class="ident">decoder</span>: <span class="ident">Codec</span>,
-    <span class="ident">buf</span>: <span class="ident">BytesMut</span>,
-    <span class="ident">closed</span>: <span class="ident">bool</span>,
+<span class="macro">pin_project!</span> {
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+    <span class="kw">struct</span> <span class="ident">WsStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
+        <span class="attribute">#[<span class="ident">pin</span>]</span>
+        <span class="ident">stream</span>: <span class="ident">S</span>,
+        <span class="ident">decoder</span>: <span class="ident">Codec</span>,
+        <span class="ident">buf</span>: <span class="ident">BytesMut</span>,
+        <span class="ident">closed</span>: <span class="ident">bool</span>,
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> <span class="ident">WsStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">stream</span>: <span class="ident">S</span>, <span class="ident">codec</span>: <span class="ident">Codec</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">stream</span>: <span class="ident">S</span>, <span class="ident">codec</span>: <span class="ident">Codec</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">stream</span>,
             <span class="ident">decoder</span>: <span class="ident">codec</span>,
@@ -1282,21 +1659,21 @@
 {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
 
         <span class="kw">if</span> <span class="op">!</span><span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">closed</span> {
             <span class="kw">loop</span> {
-                <span class="kw">match</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">this</span>.<span class="ident">stream</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>) {
-                    <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">chunk</span>))) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">match</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">this</span>.<span class="ident">stream</span>).<span class="ident">poll_next</span>(<span class="ident">cx</span>) {
+                    <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">chunk</span>))) =&gt; {
                         <span class="ident">this</span>.<span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">chunk</span>[..]);
                     }
-                    <span class="ident">Poll::Ready</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">Poll::Ready</span>(<span class="prelude-val">None</span>) =&gt; {
                         <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">closed</span> <span class="op">=</span> <span class="bool-val">true</span>;
                         <span class="kw">break</span>;
                     }
-                    <span class="ident">Poll::Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
-                    <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>))) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">Poll::Pending</span> =&gt; <span class="kw">break</span>,
+                    <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>))) =&gt; {
                         <span class="kw">return</span> <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">ProtocolError::Io</span>(<span class="ident">io::Error::new</span>(
                             <span class="ident">io::ErrorKind::Other</span>,
                             <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
@@ -1307,16 +1684,16 @@
         }
 
         <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">decoder</span>.<span class="ident">decode</span>(<span class="ident">this</span>.<span class="ident">buf</span>)<span class="question-mark">?</span> {
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">None</span> =&gt; {
                 <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">this</span>.<span class="ident">closed</span> {
                     <span class="ident">Poll::Ready</span>(<span class="prelude-val">None</span>)
                 } <span class="kw">else</span> {
                     <span class="ident">Poll::Pending</span>
                 }
             }
-            <span class="prelude-val">Some</span>(<span class="ident">frm</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">frm</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">frm</span> {
-                    <span class="ident">Frame::Text</span>(<span class="ident">data</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">Frame::Text</span>(<span class="ident">data</span>) =&gt; {
                         <span class="ident">Message::Text</span>(<span class="ident">ByteString::try_from</span>(<span class="ident">data</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
                             <span class="ident">ProtocolError::Io</span>(<span class="ident">io::Error::new</span>(
                                 <span class="ident">io::ErrorKind::Other</span>,
@@ -1324,11 +1701,11 @@
                             ))
                         })<span class="question-mark">?</span>)
                     }
-                    <span class="ident">Frame::Binary</span>(<span class="ident">data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Message::Binary</span>(<span class="ident">data</span>),
-                    <span class="ident">Frame::Ping</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Message::Ping</span>(<span class="ident">s</span>),
-                    <span class="ident">Frame::Pong</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Message::Pong</span>(<span class="ident">s</span>),
-                    <span class="ident">Frame::Close</span>(<span class="ident">reason</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Message::Close</span>(<span class="ident">reason</span>),
-                    <span class="ident">Frame::Continuation</span>(<span class="ident">item</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Message::Continuation</span>(<span class="ident">item</span>),
+                    <span class="ident">Frame::Binary</span>(<span class="ident">data</span>) =&gt; <span class="ident">Message::Binary</span>(<span class="ident">data</span>),
+                    <span class="ident">Frame::Ping</span>(<span class="ident">s</span>) =&gt; <span class="ident">Message::Ping</span>(<span class="ident">s</span>),
+                    <span class="ident">Frame::Pong</span>(<span class="ident">s</span>) =&gt; <span class="ident">Message::Pong</span>(<span class="ident">s</span>),
+                    <span class="ident">Frame::Close</span>(<span class="ident">reason</span>) =&gt; <span class="ident">Message::Close</span>(<span class="ident">reason</span>),
+                    <span class="ident">Frame::Continuation</span>(<span class="ident">item</span>) =&gt; <span class="ident">Message::Continuation</span>(<span class="ident">item</span>),
                 };
                 <span class="ident">Poll::Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">msg</span>)))
             }
@@ -1338,9 +1715,12 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="ident">actix_web</span>::{
+        <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">Method</span>},
+        <span class="ident">test::TestRequest</span>,
+    };
+
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">actix_web::http</span>::{<span class="ident">header</span>, <span class="ident">Method</span>};
-    <span class="kw">use</span> <span class="ident">actix_web::test::TestRequest</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_handshake</span>() {
@@ -1578,6 +1958,6 @@
         );
     }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web_actors" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>
+</code></pre></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web_actors" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (83b15bfe1 2021-12-28)" ></div>
+</body></html>

@@ -1,5 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/data.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>data.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="https://actix.rs/favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../actix_web/index.html'><div class='logo-container'><img src='https://actix.rs/img/logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src&#x2F;data.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>data.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="https:&#x2F;&#x2F;actix.rs&#x2F;favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../actix_web/index.html"><div class="logo-container"><img src="https:&#x2F;&#x2F;actix.rs&#x2F;img&#x2F;logo.png" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../actix_web/index.html"><img src="https:&#x2F;&#x2F;actix.rs&#x2F;img&#x2F;logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -298,29 +299,82 @@
 <span id="297">297</span>
 <span id="298">298</span>
 <span id="299">299</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">std::any::type_name</span>;
-<span class="kw">use</span> <span class="ident">std::ops::Deref</span>;
-<span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">any::type_name</span>, <span class="ident">ops::Deref</span>, <span class="ident">sync::Arc</span>};
 
-<span class="kw">use</span> <span class="ident">actix_http::error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorInternalServerError</span>};
 <span class="kw">use</span> <span class="ident">actix_http::Extensions</span>;
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="ident">err</span>, <span class="ident">ok</span>, <span class="ident">Ready</span>};
 <span class="kw">use</span> <span class="ident">futures_core::future::LocalBoxFuture</span>;
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::dev::Payload</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::extract::FromRequest</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::request::HttpRequest</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">dev::Payload</span>, <span class="ident">error::ErrorInternalServerError</span>, <span class="ident">extract::FromRequest</span>, <span class="ident">request::HttpRequest</span>,
+    <span class="ident">Error</span>,
+};
 
 <span class="doccomment">/// Data factory.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait</span> <span class="ident">DataFactory</span> {
     <span class="doccomment">/// Return true if modifications were made to extensions map.</span>
-    <span class="kw">fn</span> <span class="ident">create</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extensions</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extensions</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
+    <span class="kw">fn</span> <span class="ident">create</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extensions</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Extensions</span>) -&gt; <span class="ident">bool</span>;
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type</span> <span class="ident">FnDataFactory</span> <span class="op">=</span>
-    <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span>, ()<span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() -&gt; <span class="ident">LocalBoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span>, ()<span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
 <span class="doccomment">/// Application data.</span>
 <span class="doccomment">///</span>
@@ -334,53 +388,72 @@
 <span class="doccomment">/// server constructs an application instance for each thread, thus application data must be</span>
 <span class="doccomment">/// constructed multiple times. If you want to share data between different threads, a shareable</span>
 <span class="doccomment">/// object should be used, e.g. `Send + Sync`. Application data does not need to be `Send`</span>
-<span class="doccomment">/// or `Sync`. Internally `Data` uses `Arc`.</span>
+<span class="doccomment">/// or `Sync`. Internally `Data` contains an `Arc`.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// If route data is not set for a handler, using `Data&lt;T&gt;` extractor would cause *Internal</span>
-<span class="doccomment">/// Server Error* response.</span>
+<span class="doccomment">/// If route data is not set for a handler, using `Data&lt;T&gt;` extractor would cause a `500 Internal</span>
+<span class="doccomment">/// Server Error` response.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Unsized Data</span>
+<span class="doccomment">/// For types that are unsized, most commonly `dyn T`, `Data` can wrap these types by first</span>
+<span class="doccomment">/// constructing an `Arc&lt;dyn T&gt;` and using the `From` implementation to convert it.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
+<span class="doccomment">/// # use std::{fmt::Display, sync::Arc};</span>
+<span class="doccomment">/// # use actix_web::web::Data;</span>
+<span class="doccomment">/// let displayable_arc: Arc&lt;dyn Display&gt; = Arc::new(42usize);</span>
+<span class="doccomment">/// let displayable_data: Data&lt;dyn Display&gt; = Data::from(displayable_arc);</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">/// ```</span>
 <span class="doccomment">/// use std::sync::Mutex;</span>
-<span class="doccomment">/// use actix_web::{web, App, HttpResponse, Responder};</span>
+<span class="doccomment">/// use actix_web::{App, HttpRequest, HttpResponse, Responder, web::{self, Data}};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// struct MyData {</span>
 <span class="doccomment">///     counter: usize,</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// /// Use the `Data&lt;T&gt;` extractor to access data in a handler.</span>
-<span class="doccomment">/// async fn index(data: web::Data&lt;Mutex&lt;MyData&gt;&gt;) -&gt; impl Responder {</span>
-<span class="doccomment">///     let mut data = data.lock().unwrap();</span>
-<span class="doccomment">///     data.counter += 1;</span>
+<span class="doccomment">/// async fn index(data: Data&lt;Mutex&lt;MyData&gt;&gt;) -&gt; impl Responder {</span>
+<span class="doccomment">///     let mut my_data = data.lock().unwrap();</span>
+<span class="doccomment">///     my_data.counter += 1;</span>
 <span class="doccomment">///     HttpResponse::Ok()</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     let data = web::Data::new(Mutex::new(MyData{ counter: 0 }));</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     let app = App::new()</span>
-<span class="doccomment">///         // Store `MyData` in application storage.</span>
-<span class="doccomment">///         .app_data(data.clone())</span>
-<span class="doccomment">///         .service(</span>
-<span class="doccomment">///             web::resource(&quot;/index.html&quot;).route(</span>
-<span class="doccomment">///                 web::get().to(index)));</span>
+<span class="doccomment">/// /// Alteratively, use the `HttpRequest::app_data` method to access data in a handler.</span>
+<span class="doccomment">/// async fn index_alt(req: HttpRequest) -&gt; impl Responder {</span>
+<span class="doccomment">///     let data = req.app_data::&lt;Data&lt;Mutex&lt;MyData&gt;&gt;&gt;().unwrap();</span>
+<span class="doccomment">///     let mut my_data = data.lock().unwrap();</span>
+<span class="doccomment">///     my_data.counter += 1;</span>
+<span class="doccomment">///     HttpResponse::Ok()</span>
 <span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// let data = Data::new(Mutex::new(MyData { counter: 0 }));</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// let app = App::new()</span>
+<span class="doccomment">///     // Store `MyData` in application storage.</span>
+<span class="doccomment">///     .app_data(Data::clone(&amp;data))</span>
+<span class="doccomment">///     .route(&quot;/index.html&quot;, web::get().to(index))</span>
+<span class="doccomment">///     .route(&quot;/index-alt.html&quot;, web::get().to(index_alt));</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span>(<span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create new `Data` instance.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">state</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">state</span>: <span class="ident">T</span>) -&gt; <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="ident">Data</span>(<span class="ident">Arc::new</span>(<span class="ident">state</span>))
     }
+}
 
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Get reference to inner app data.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">T</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ref</span>()
     }
 
     <span class="doccomment">/// Convert to the internal Arc&lt;T&gt;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="self">self</span>) -&gt; <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>
     }
 }
@@ -388,19 +461,19 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="ident">Data</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">clone</span>())
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">arc</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">arc</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Data</span>(<span class="ident">arc</span>)
     }
 }
@@ -409,7 +482,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Serialize</span>,
 {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">S</span>: <span class="ident">serde::Serializer</span>,
     {
@@ -418,12 +491,11 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> <span class="ident">FromRequest</span> <span class="kw">for</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Future</span> {
+    <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Payload</span>) -&gt; <span class="ident"><span class="self">Self</span>::Future</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">st</span>) <span class="op">=</span> <span class="ident">req</span>.<span class="ident">app_data</span>::<span class="op">&lt;</span><span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>() {
             <span class="ident">ok</span>(<span class="ident">st</span>.<span class="ident">clone</span>())
         } <span class="kw">else</span> {
@@ -434,14 +506,14 @@
                 <span class="ident">type_name</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(),
             );
             <span class="ident">err</span>(<span class="ident">ErrorInternalServerError</span>(
-                <span class="string">&quot;App data is not configured, to configure use App::data()&quot;</span>,
+                <span class="string">&quot;App data is not configured, to configure construct it with web::Data::new() and pass it to App::app_data()&quot;</span>,
             ))
         }
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> <span class="ident">DataFactory</span> <span class="kw">for</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">create</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extensions</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Extensions</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">create</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extensions</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Extensions</span>) -&gt; <span class="ident">bool</span> {
         <span class="ident">extensions</span>.<span class="ident">insert</span>(<span class="ident">Data</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">clone</span>()));
         <span class="bool-val">true</span>
     }
@@ -457,6 +529,8 @@
         <span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">HttpResponse</span>,
     };
 
+    <span class="comment">// allow deprecated App::data</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_data_extractor</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(<span class="ident">App::new</span>().<span class="ident">data</span>(<span class="string">&quot;TEST&quot;</span>.<span class="ident">to_string</span>()).<span class="ident">service</span>(
@@ -524,6 +598,8 @@
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
     }
 
+    <span class="comment">// allow deprecated App::data</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_route_data_extractor</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">init_service</span>(
@@ -553,6 +629,8 @@
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::INTERNAL_SERVER_ERROR</span>);
     }
 
+    <span class="comment">// allow deprecated App::data</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_override_data</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span>
@@ -575,17 +653,17 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_data_from_arc</span>() {
         <span class="kw">let</span> <span class="ident">data_new</span> <span class="op">=</span> <span class="ident">Data::new</span>(<span class="ident">String::from</span>(<span class="string">&quot;test-123&quot;</span>));
         <span class="kw">let</span> <span class="ident">data_from_arc</span> <span class="op">=</span> <span class="ident">Data::from</span>(<span class="ident">Arc::new</span>(<span class="ident">String::from</span>(<span class="string">&quot;test-123&quot;</span>)));
-        <span class="macro">assert_eq!</span>(<span class="ident">data_new</span>.<span class="number">0</span>, <span class="ident">data_from_arc</span>.<span class="number">0</span>)
+        <span class="macro">assert_eq!</span>(<span class="ident">data_new</span>.<span class="number">0</span>, <span class="ident">data_from_arc</span>.<span class="number">0</span>);
     }
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_data_from_dyn_arc</span>() {
         <span class="kw">trait</span> <span class="ident">TestTrait</span> {
-            <span class="kw">fn</span> <span class="ident">get_num</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span>;
+            <span class="kw">fn</span> <span class="ident">get_num</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">i32</span>;
         }
         <span class="kw">struct</span> <span class="ident">A</span> {}
         <span class="kw">impl</span> <span class="ident">TestTrait</span> <span class="kw">for</span> <span class="ident">A</span> {
-            <span class="kw">fn</span> <span class="ident">get_num</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
+            <span class="kw">fn</span> <span class="ident">get_num</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">i32</span> {
                 <span class="number">42</span>
             }
         }
@@ -597,7 +675,41 @@
         <span class="kw">let</span> <span class="ident">data_arc</span> <span class="op">=</span> <span class="ident">Data::from</span>(<span class="ident">dyn_arc</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">data_arc_box</span>.<span class="ident">get_num</span>(), <span class="ident">data_arc</span>.<span class="ident">get_num</span>())
     }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_dyn_data_into_arc</span>() {
+        <span class="kw">trait</span> <span class="ident">TestTrait</span> {
+            <span class="kw">fn</span> <span class="ident">get_num</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">i32</span>;
+        }
+        <span class="kw">struct</span> <span class="ident">A</span> {}
+        <span class="kw">impl</span> <span class="ident">TestTrait</span> <span class="kw">for</span> <span class="ident">A</span> {
+            <span class="kw">fn</span> <span class="ident">get_num</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">i32</span> {
+                <span class="number">42</span>
+            }
+        }
+        <span class="kw">let</span> <span class="ident">dyn_arc</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">TestTrait</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">A</span> {});
+        <span class="kw">let</span> <span class="ident">data_arc</span> <span class="op">=</span> <span class="ident">Data::from</span>(<span class="ident">dyn_arc</span>);
+        <span class="kw">let</span> <span class="ident">arc_from_data</span> <span class="op">=</span> <span class="ident">data_arc</span>.<span class="ident">clone</span>().<span class="ident">into_inner</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">data_arc</span>.<span class="ident">get_num</span>(), <span class="ident">arc_from_data</span>.<span class="ident">get_num</span>())
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_get_ref_from_dyn_data</span>() {
+        <span class="kw">trait</span> <span class="ident">TestTrait</span> {
+            <span class="kw">fn</span> <span class="ident">get_num</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">i32</span>;
+        }
+        <span class="kw">struct</span> <span class="ident">A</span> {}
+        <span class="kw">impl</span> <span class="ident">TestTrait</span> <span class="kw">for</span> <span class="ident">A</span> {
+            <span class="kw">fn</span> <span class="ident">get_num</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">i32</span> {
+                <span class="number">42</span>
+            }
+        }
+        <span class="kw">let</span> <span class="ident">dyn_arc</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">TestTrait</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">A</span> {});
+        <span class="kw">let</span> <span class="ident">data_arc</span> <span class="op">=</span> <span class="ident">Data::from</span>(<span class="ident">dyn_arc</span>);
+        <span class="kw">let</span> <span class="ident">ref_data</span> <span class="op">=</span> <span class="ident">data_arc</span>.<span class="ident">get_ref</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">data_arc</span>.<span class="ident">get_num</span>(), <span class="ident">ref_data</span>.<span class="ident">get_num</span>())
+    }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>
+</code></pre></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (83b15bfe1 2021-12-28)" ></div>
+</body></html>

@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["actix_multipart"] = [{"text":"impl <a class=\"trait\" href=\"actix_web/error/response_error/trait.ResponseError.html\" title=\"trait actix_web::error::response_error::ResponseError\">ResponseError</a> for <a class=\"enum\" href=\"actix_multipart/enum.MultipartError.html\" title=\"enum actix_multipart::MultipartError\">MultipartError</a>","synthetic":false,"types":["actix_multipart::error::MultipartError"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

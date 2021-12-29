@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["actix_router"] = [{"text":"impl&lt;'de, T:&nbsp;<a class=\"trait\" href=\"actix_router/trait.ResourcePath.html\" title=\"trait actix_router::ResourcePath\">ResourcePath</a> + 'de&gt; <a class=\"trait\" href=\"https://docs.rs/serde/1.0.132/serde/de/trait.Deserializer.html\" title=\"trait serde::de::Deserializer\">Deserializer</a>&lt;'de&gt; for <a class=\"struct\" href=\"actix_router/struct.PathDeserializer.html\" title=\"struct actix_router::PathDeserializer\">PathDeserializer</a>&lt;'de, T&gt;","synthetic":false,"types":["actix_router::de::PathDeserializer"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

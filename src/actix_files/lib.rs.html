@@ -1,7 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `actix-files/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../actix_files/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `actix-files&#x2F;src&#x2F;lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../actix_files/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../actix_files/index.html"><img class="rust-logo" src="../../rust-logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -847,8 +846,117 @@
 <span id="844">844</span>
 <span id="845">845</span>
 <span id="846">846</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! Static file serving for Actix Web.</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
+<span id="919">919</span>
+<span id="920">920</span>
+<span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
+<span id="925">925</span>
+<span id="926">926</span>
+<span id="927">927</span>
+<span id="928">928</span>
+<span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Static file serving for Actix Web.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Provides a non-blocking service for serving static files from disk.</span>
 <span class="doccomment">//!</span>
@@ -861,16 +969,17 @@
 <span class="doccomment">//!     .service(Files::new(&quot;/static&quot;, &quot;.&quot;).prefer_utf8(true));</span>
 <span class="doccomment">//! ```</span>
 
-<span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>)]</span>
-<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_docs</span>, <span class="ident">missing_debug_implementations</span>)]</span>
+<span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rust_2018_idioms</span>, <span class="ident">nonstandard_style</span>)]</span>
+<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">future_incompatible</span>, <span class="ident">missing_docs</span>, <span class="ident">missing_debug_implementations</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">actix_service::boxed</span>::{<span class="ident">BoxService</span>, <span class="ident">BoxServiceFactory</span>};
 <span class="kw">use</span> <span class="ident">actix_web</span>::{
-    <span class="ident">dev</span>::{<span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
+    <span class="ident">dev</span>::{<span class="ident">RequestHead</span>, <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>},
     <span class="ident">error::Error</span>,
     <span class="ident">http::header::DispositionType</span>,
 };
 <span class="kw">use</span> <span class="ident">mime_guess::from_ext</span>;
+<span class="kw">use</span> <span class="ident">std::path::Path</span>;
 
 <span class="kw">mod</span> <span class="ident">chunked</span>;
 <span class="kw">mod</span> <span class="ident">directory</span>;
@@ -882,16 +991,16 @@
 <span class="kw">mod</span> <span class="ident">range</span>;
 <span class="kw">mod</span> <span class="ident">service</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::chunked::ChunkedReadFile</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::directory::Directory</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::files::Files</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::named::NamedFile</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::range::HttpRange</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::service::FilesService</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::chunked::ChunkedReadFile</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::directory::Directory</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::files::Files</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::named::NamedFile</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::range::HttpRange</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::service::FilesService</span>;
 
-<span class="kw">use</span> <span class="self">self</span><span class="ident">::directory</span>::{<span class="ident">directory_listing</span>, <span class="ident">DirectoryRenderer</span>};
-<span class="kw">use</span> <span class="self">self</span><span class="ident">::error::FilesError</span>;
-<span class="kw">use</span> <span class="self">self</span><span class="ident">::path_buf::PathBufWrap</span>;
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::directory</span>::{<span class="ident">directory_listing</span>, <span class="ident">DirectoryRenderer</span>};
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::error::FilesError</span>;
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::path_buf::PathBufWrap</span>;
 
 <span class="kw">type</span> <span class="ident">HttpService</span> <span class="op">=</span> <span class="ident">BoxService</span><span class="op">&lt;</span><span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 <span class="kw">type</span> <span class="ident">HttpNewService</span> <span class="op">=</span> <span class="ident">BoxServiceFactory</span><span class="op">&lt;</span>(), <span class="ident">ServiceRequest</span>, <span class="ident">ServiceResponse</span>, <span class="ident">Error</span>, ()<span class="op">&gt;</span>;
@@ -900,22 +1009,23 @@
 <span class="doccomment">/// If `ext` is empty or no associated type for the extension was found, returns</span>
 <span class="doccomment">/// the type `application/octet-stream`.</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">file_extension_to_mime</span>(<span class="ident">ext</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">mime::Mime</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">file_extension_to_mime</span>(<span class="ident">ext</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">mime::Mime</span> {
     <span class="ident">from_ext</span>(<span class="ident">ext</span>).<span class="ident">first_or_octet_stream</span>()
 }
 
-<span class="kw">type</span> <span class="ident">MimeOverride</span> <span class="op">=</span> <span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">mime::Name</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispositionType</span>;
+<span class="kw">type</span> <span class="ident">MimeOverride</span> <span class="op">=</span> <span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">mime::Name</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">DispositionType</span>;
+
+<span class="kw">type</span> <span class="ident">PathFilter</span> <span class="op">=</span> <span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="kw-2">&amp;</span><span class="ident">RequestHead</span>) -&gt; <span class="ident">bool</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="ident">std</span>::{
-        <span class="ident">fs</span>::{<span class="self">self</span>, <span class="ident">File</span>},
+        <span class="ident">fs</span>::{<span class="self">self</span>},
         <span class="ident">ops::Add</span>,
         <span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">SystemTime</span>},
     };
 
     <span class="kw">use</span> <span class="ident">actix_service::ServiceFactory</span>;
-    <span class="kw">use</span> <span class="ident">actix_utils::future::ok</span>;
     <span class="kw">use</span> <span class="ident">actix_web</span>::{
         <span class="ident">guard</span>,
         <span class="ident">http</span>::{
@@ -929,8 +1039,9 @@
     };
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::named::File</span>;
 
-    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="attribute">#[<span class="ident">actix_web::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_file_extension_to_mime</span>() {
         <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">file_extension_to_mime</span>(<span class="string">&quot;&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">m</span>, <span class="ident">mime::APPLICATION_OCTET_STREAM</span>);
@@ -947,7 +1058,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_if_modified_since_without_if_none_match</span>() {
-        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">since</span> <span class="op">=</span> <span class="ident">header::HttpDate::from</span>(<span class="ident">SystemTime::now</span>().<span class="ident">add</span>(<span class="ident">Duration::from_secs</span>(<span class="number">60</span>)));
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>()
@@ -959,7 +1070,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_if_modified_since_without_if_none_match_same</span>() {
-        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">since</span> <span class="op">=</span> <span class="ident">file</span>.<span class="ident">last_modified</span>().<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>()
@@ -971,7 +1082,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_if_modified_since_with_if_none_match</span>() {
-        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">since</span> <span class="op">=</span> <span class="ident">header::HttpDate::from</span>(<span class="ident">SystemTime::now</span>().<span class="ident">add</span>(<span class="ident">Duration::from_secs</span>(<span class="number">60</span>)));
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>()
@@ -984,7 +1095,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_if_unmodified_since</span>() {
-        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">since</span> <span class="op">=</span> <span class="ident">file</span>.<span class="ident">last_modified</span>().<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>()
@@ -996,7 +1107,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_if_unmodified_since_failed</span>() {
-        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">since</span> <span class="op">=</span> <span class="ident">header::HttpDate::from</span>(<span class="ident">SystemTime::UNIX_EPOCH</span>);
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>()
@@ -1008,14 +1119,14 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_text</span>() {
-        <span class="macro">assert!</span>(<span class="ident">NamedFile::open</span>(<span class="string">&quot;test--&quot;</span>).<span class="ident">is_err</span>());
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert!</span>(<span class="ident">NamedFile::open_async</span>(<span class="string">&quot;test--&quot;</span>).<span class="kw">await</span>.<span class="ident">is_err</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         {
             <span class="ident">file</span>.<span class="ident">file</span>();
             <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span>;
         }
         {
-            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">file</span>;
+            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">file</span>;
         }
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
@@ -1032,14 +1143,14 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_content_disposition</span>() {
-        <span class="macro">assert!</span>(<span class="ident">NamedFile::open</span>(<span class="string">&quot;test--&quot;</span>).<span class="ident">is_err</span>());
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert!</span>(<span class="ident">NamedFile::open_async</span>(<span class="string">&quot;test--&quot;</span>).<span class="kw">await</span>.<span class="ident">is_err</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         {
             <span class="ident">file</span>.<span class="ident">file</span>();
             <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span>;
         }
         {
-            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">file</span>;
+            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">file</span>;
         }
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
@@ -1049,7 +1160,8 @@
             <span class="string">&quot;inline; filename=\&quot;Cargo.toml\&quot;&quot;</span>
         );
 
-        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+            .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">disable_content_disposition</span>();
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
@@ -1059,14 +1171,25 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_non_ascii_file_name</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span>
-            <span class="ident">NamedFile::from_file</span>(<span class="ident">File::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;貨物.toml&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> {
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;experimental-io-uring&quot;</span>)]</span>
+            {
+                <span class="ident"><span class="kw">crate</span>::named::File::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>()
+            }
+
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;experimental-io-uring&quot;</span>))]</span>
+            {
+                <span class="ident"><span class="kw">crate</span>::named::File::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>()
+            }
+        };
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::from_file</span>(<span class="ident">file</span>, <span class="string">&quot;貨物.toml&quot;</span>).<span class="ident">unwrap</span>();
         {
             <span class="ident">file</span>.<span class="ident">file</span>();
             <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span>;
         }
         {
-            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">file</span>;
+            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">file</span>;
         }
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
@@ -1083,7 +1206,8 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_set_content_type</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+            .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">set_content_type</span>(<span class="ident">mime::TEXT_XML</span>);
         {
@@ -1091,7 +1215,7 @@
             <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span>;
         }
         {
-            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">file</span>;
+            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">file</span>;
         }
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
@@ -1108,13 +1232,13 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_image</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;tests/test.png&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;tests/test.png&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         {
             <span class="ident">file</span>.<span class="ident">file</span>();
             <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span>;
         }
         {
-            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">file</span>;
+            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">file</span>;
         }
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
@@ -1130,12 +1254,29 @@
     }
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_javascript</span>() {
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;tests/test.js&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">file</span>.<span class="ident">respond_to</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">header::CONTENT_TYPE</span>).<span class="ident">unwrap</span>(),
+            <span class="string">&quot;application/javascript&quot;</span>
+        );
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">header::CONTENT_DISPOSITION</span>).<span class="ident">unwrap</span>(),
+            <span class="string">&quot;inline; filename=\&quot;test.js\&quot;&quot;</span>
+        );
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_image_attachment</span>() {
         <span class="kw">let</span> <span class="ident">cd</span> <span class="op">=</span> <span class="ident">ContentDisposition</span> {
             <span class="ident">disposition</span>: <span class="ident">DispositionType::Attachment</span>,
             <span class="ident">parameters</span>: <span class="macro">vec!</span>[<span class="ident">DispositionParam::Filename</span>(<span class="ident">String::from</span>(<span class="string">&quot;test.png&quot;</span>))],
         };
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;tests/test.png&quot;</span>)
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;tests/test.png&quot;</span>)
+            .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">set_content_disposition</span>(<span class="ident">cd</span>);
         {
@@ -1143,7 +1284,7 @@
             <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span>;
         }
         {
-            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">file</span>;
+            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">file</span>;
         }
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
@@ -1160,13 +1301,13 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_binary</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;tests/test.binary&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;tests/test.binary&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         {
             <span class="ident">file</span>.<span class="ident">file</span>();
             <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span>;
         }
         {
-            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">file</span>;
+            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">file</span>;
         }
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
@@ -1183,7 +1324,8 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_status_code_text</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+            .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">set_status_code</span>(<span class="ident">StatusCode::NOT_FOUND</span>);
         {
@@ -1191,7 +1333,7 @@
             <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span>;
         }
         {
-            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">file</span>;
+            <span class="kw">let</span> <span class="ident">_f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">File</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">file</span>;
         }
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">to_http_request</span>();
@@ -1209,7 +1351,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_mime_override</span>() {
-        <span class="kw">fn</span> <span class="ident">all_attachment</span>(<span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">mime::Name</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispositionType</span> {
+        <span class="kw">fn</span> <span class="ident">all_attachment</span>(<span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">mime::Name</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">DispositionType</span> {
             <span class="ident">DispositionType::Attachment</span>
         }
 
@@ -1399,7 +1541,8 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_content_encoding</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(<span class="ident">App::new</span>().<span class="ident">wrap</span>(<span class="ident">Compress::default</span>()).<span class="ident">service</span>(
             <span class="ident">web::resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
-                <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+                <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+                    .<span class="kw">await</span>
                     .<span class="ident">unwrap</span>()
                     .<span class="ident">set_content_encoding</span>(<span class="ident">header::ContentEncoding::Identity</span>)
             }),
@@ -1419,7 +1562,8 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_content_encoding_gzip</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(<span class="ident">App::new</span>().<span class="ident">wrap</span>(<span class="ident">Compress::default</span>()).<span class="ident">service</span>(
             <span class="ident">web::resource</span>(<span class="string">&quot;/&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
-                <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+                <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>)
+                    .<span class="kw">await</span>
                     .<span class="ident">unwrap</span>()
                     .<span class="ident">set_content_encoding</span>(<span class="ident">header::ContentEncoding::Gzip</span>)
             }),
@@ -1445,7 +1589,7 @@
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_allowed_method</span>() {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">method</span>(<span class="ident">Method::GET</span>).<span class="ident">to_http_request</span>();
-        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">file</span>.<span class="ident">respond_to</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::OK</span>);
     }
@@ -1482,7 +1626,7 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_redirect_to_slash_directory</span>() {
-        <span class="comment">// should not redirect if no index</span>
+        <span class="comment">// should not redirect if no index and files listing is disabled</span>
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(
             <span class="ident">App::new</span>().<span class="ident">service</span>(<span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>).<span class="ident">redirect_to_slash_directory</span>()),
         )
@@ -1496,6 +1640,19 @@
             <span class="ident">App::new</span>().<span class="ident">service</span>(
                 <span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>)
                     .<span class="ident">index_file</span>(<span class="string">&quot;test.png&quot;</span>)
+                    .<span class="ident">redirect_to_slash_directory</span>(),
+            ),
+        )
+        .<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::with_uri</span>(<span class="string">&quot;/tests&quot;</span>).<span class="ident">to_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">srv</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::FOUND</span>);
+
+        <span class="comment">// should redirect if files listing is enabled</span>
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(
+            <span class="ident">App::new</span>().<span class="ident">service</span>(
+                <span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>)
+                    .<span class="ident">show_files_listing</span>()
                     .<span class="ident">redirect_to_slash_directory</span>(),
             ),
         )
@@ -1523,8 +1680,8 @@
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_default_handler_file_missing</span>() {
         <span class="kw">let</span> <span class="ident">st</span> <span class="op">=</span> <span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>)
-            .<span class="ident">default_handler</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> {
-                <span class="ident">ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse::Ok</span>().<span class="ident">body</span>(<span class="string">&quot;default content&quot;</span>)))
+            .<span class="ident">default_handler</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> <span class="kw">async</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse::Ok</span>().<span class="ident">body</span>(<span class="string">&quot;default content&quot;</span>)))
             })
             .<span class="ident">new_service</span>(())
             .<span class="kw">await</span>
@@ -1607,9 +1764,8 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_serve_named_file</span>() {
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span>
-            <span class="ident">test::init_service</span>(<span class="ident">App::new</span>().<span class="ident">service</span>(<span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>()))
-                .<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">factory</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(<span class="ident">App::new</span>().<span class="ident">service</span>(<span class="ident">factory</span>)).<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::get</span>().<span class="ident">uri</span>(<span class="string">&quot;/Cargo.toml&quot;</span>).<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">srv</span>, <span class="ident">req</span>).<span class="kw">await</span>;
@@ -1626,11 +1782,9 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_serve_named_file_prefix</span>() {
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(
-            <span class="ident">App::new</span>()
-                .<span class="ident">service</span>(<span class="ident">web::scope</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">service</span>(<span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>())),
-        )
-        .<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">factory</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span>
+            <span class="ident">test::init_service</span>(<span class="ident">App::new</span>().<span class="ident">service</span>(<span class="ident">web::scope</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">service</span>(<span class="ident">factory</span>))).<span class="kw">await</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::get</span>().<span class="ident">uri</span>(<span class="string">&quot;/test/Cargo.toml&quot;</span>).<span class="ident">to_request</span>();
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">srv</span>, <span class="ident">req</span>).<span class="kw">await</span>;
@@ -1647,10 +1801,8 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_named_file_default_service</span>() {
-        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(
-            <span class="ident">App::new</span>().<span class="ident">default_service</span>(<span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>()),
-        )
-        .<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">factory</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">test::init_service</span>(<span class="ident">App::new</span>().<span class="ident">default_service</span>(<span class="ident">factory</span>)).<span class="kw">await</span>;
 
         <span class="kw">for</span> <span class="ident">route</span> <span class="kw">in</span> [<span class="string">&quot;/foobar&quot;</span>, <span class="string">&quot;/baz&quot;</span>, <span class="string">&quot;/&quot;</span>].<span class="ident">iter</span>() {
             <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::get</span>().<span class="ident">uri</span>(<span class="ident">route</span>).<span class="ident">to_request</span>();
@@ -1665,8 +1817,9 @@
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_default_handler_named_file</span>() {
+        <span class="kw">let</span> <span class="ident">factory</span> <span class="op">=</span> <span class="ident">NamedFile::open_async</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">st</span> <span class="op">=</span> <span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>)
-            .<span class="ident">default_handler</span>(<span class="ident">NamedFile::open</span>(<span class="string">&quot;Cargo.toml&quot;</span>).<span class="ident">unwrap</span>())
+            .<span class="ident">default_handler</span>(<span class="ident">factory</span>)
             .<span class="ident">new_service</span>(())
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>();
@@ -1693,7 +1846,72 @@
             <span class="string">&quot;inline; filename=\&quot;symlink-test.png\&quot;&quot;</span>
         );
     }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_index_with_show_files_listing</span>() {
+        <span class="kw">let</span> <span class="ident">service</span> <span class="op">=</span> <span class="ident">Files::new</span>(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;.&quot;</span>)
+            .<span class="ident">index_file</span>(<span class="string">&quot;lib.rs&quot;</span>)
+            .<span class="ident">show_files_listing</span>()
+            .<span class="ident">new_service</span>(())
+            .<span class="kw">await</span>
+            .<span class="ident">unwrap</span>();
+
+        <span class="comment">// Serve the index if exists</span>
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">uri</span>(<span class="string">&quot;/src&quot;</span>).<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">service</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::OK</span>);
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">header::CONTENT_TYPE</span>).<span class="ident">unwrap</span>(),
+            <span class="string">&quot;text/x-rust&quot;</span>
+        );
+
+        <span class="comment">// Show files listing, otherwise.</span>
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::default</span>().<span class="ident">uri</span>(<span class="string">&quot;/tests&quot;</span>).<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">service</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">resp</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">header::CONTENT_TYPE</span>).<span class="ident">unwrap</span>(),
+            <span class="string">&quot;text/html; charset=utf-8&quot;</span>
+        );
+        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">test::read_body</span>(<span class="ident">resp</span>).<span class="kw">await</span>;
+        <span class="macro">assert!</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">bytes</span>).<span class="ident">contains</span>(<span class="string">&quot;/tests/test.png&quot;</span>));
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_path_filter</span>() {
+        <span class="comment">// prevent searching subdirectories</span>
+        <span class="kw">let</span> <span class="ident">st</span> <span class="op">=</span> <span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>)
+            .<span class="ident">path_filter</span>(<span class="op">|</span><span class="ident">path</span>, <span class="kw">_</span><span class="op">|</span> <span class="ident">path</span>.<span class="ident">components</span>().<span class="ident">count</span>() <span class="op">==</span> <span class="number">1</span>)
+            .<span class="ident">new_service</span>(())
+            .<span class="kw">await</span>
+            .<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::with_uri</span>(<span class="string">&quot;/Cargo.toml&quot;</span>).<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">st</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::OK</span>);
+
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::with_uri</span>(<span class="string">&quot;/src/lib.rs&quot;</span>).<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">st</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+        <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::NOT_FOUND</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_default_handler_filter</span>() {
+        <span class="kw">let</span> <span class="ident">st</span> <span class="op">=</span> <span class="ident">Files::new</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;.&quot;</span>)
+            .<span class="ident">default_handler</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> <span class="kw">async</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse::Ok</span>().<span class="ident">body</span>(<span class="string">&quot;default content&quot;</span>)))
+            })
+            .<span class="ident">path_filter</span>(<span class="op">|</span><span class="ident">path</span>, <span class="kw">_</span><span class="op">|</span> <span class="ident">path</span>.<span class="ident">extension</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;png&quot;</span>.<span class="ident">as_ref</span>()))
+            .<span class="ident">new_service</span>(())
+            .<span class="kw">await</span>
+            .<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">TestRequest::with_uri</span>(<span class="string">&quot;/Cargo.toml&quot;</span>).<span class="ident">to_srv_request</span>();
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">test::call_service</span>(<span class="kw-2">&amp;</span><span class="ident">st</span>, <span class="ident">req</span>).<span class="kw">await</span>;
+
+        <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::OK</span>);
+        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">test::read_body</span>(<span class="ident">resp</span>).<span class="kw">await</span>;
+        <span class="macro">assert_eq!</span>(<span class="ident">bytes</span>, <span class="ident">web::Bytes::from_static</span>(<span class="string">b&quot;default content&quot;</span>));
+    }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_files" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>
+</code></pre></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (83b15bfe1 2021-12-28)" ></div>
+</body></html>
