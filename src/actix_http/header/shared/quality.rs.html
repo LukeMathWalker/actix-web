@@ -1,6 +1,11 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `actix-http&#x2F;src&#x2F;header&#x2F;shared&#x2F;quality.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>quality.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="shortcut icon" href="https:&#x2F;&#x2F;actix.rs&#x2F;favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../../../actix_http/index.html"><div class="logo-container"><img src="https:&#x2F;&#x2F;actix.rs&#x2F;img&#x2F;logo.png" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../actix_http/index.html"><img src="https:&#x2F;&#x2F;actix.rs&#x2F;img&#x2F;logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `actix-http/src/header/shared/quality.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>quality.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="shortcut icon" href="https://actix.rs/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../actix_http/index.html"><div class="logo-container"><img src="https://actix.rs/img/logo.png" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../../actix_http/index.html"><div class="logo-container">
+                    <img src="https://actix.rs/img/logo.png" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../actix_http/index.html">
+                        <img src="https://actix.rs/img/logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -214,6 +219,17 @@
 <span id="212">212</span>
 <span id="213">213</span>
 <span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">convert</span>::{<span class="ident">TryFrom</span>, <span class="ident">TryInto</span>},
     <span class="ident">fmt</span>,
@@ -243,7 +259,8 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// assert_eq!(q(0.42).to_string(), &quot;0.42&quot;);</span>
 <span class="doccomment">/// assert_eq!(q(1.0).to_string(), &quot;1&quot;);</span>
-<span class="doccomment">/// assert_eq!(Quality::MIN.to_string(), &quot;0&quot;);</span>
+<span class="doccomment">/// assert_eq!(Quality::MIN.to_string(), &quot;0.001&quot;);</span>
+<span class="doccomment">/// assert_eq!(Quality::ZERO.to_string(), &quot;0&quot;);</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// [RFC 7231 §5.3.1]: https://datatracker.ietf.org/doc/html/rfc7231#section-5.3.1</span>
@@ -254,8 +271,11 @@
     <span class="doccomment">/// The maximum quality value, equivalent to `q=1.0`.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MAX</span>: <span class="ident">Quality</span> <span class="op">=</span> <span class="ident">Quality</span>(<span class="ident">MAX_QUALITY_INT</span>);
 
-    <span class="doccomment">/// The minimum quality value, equivalent to `q=0.0`.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MIN</span>: <span class="ident">Quality</span> <span class="op">=</span> <span class="ident">Quality</span>(<span class="number">0</span>);
+    <span class="doccomment">/// The minimum, non-zero quality value, equivalent to `q=0.001`.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MIN</span>: <span class="ident">Quality</span> <span class="op">=</span> <span class="ident">Quality</span>(<span class="number">1</span>);
+
+    <span class="doccomment">/// The zero quality value, equivalent to `q=0.0`.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZERO</span>: <span class="ident">Quality</span> <span class="op">=</span> <span class="ident">Quality</span>(<span class="number">0</span>);
 
     <span class="doccomment">/// Converts a float in the range 0.0–1.0 to a `Quality`.</span>
     <span class="doccomment">///</span>
@@ -267,7 +287,7 @@
         <span class="comment">// Check that `value` is within range should be done before calling this method.</span>
         <span class="comment">// Just in case, this debug_assert should catch if we were forgetful.</span>
         <span class="macro">debug_assert!</span>(
-            (<span class="number">0.0f32</span>..<span class="op">=</span><span class="number">1.0f32</span>).<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>),
+            (<span class="number">0.0</span>..<span class="op">=</span><span class="ident">MAX_QUALITY_FLOAT</span>).<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>),
             <span class="string">&quot;q value must be between 0.0 and 1.0&quot;</span>
         );
 
@@ -370,10 +390,13 @@
 <span class="doccomment">/// let q1 = q(1.0);</span>
 <span class="doccomment">/// assert_eq!(q1, Quality::MAX);</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// let q2 = q(0.0);</span>
+<span class="doccomment">/// let q2 = q(0.001);</span>
 <span class="doccomment">/// assert_eq!(q2, Quality::MIN);</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// let q3 = q(0.42);</span>
+<span class="doccomment">/// let q3 = q(0.0);</span>
+<span class="doccomment">/// assert_eq!(q3, Quality::ZERO);</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// let q4 = q(0.42);</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// An out-of-range `f32` quality will panic.</span>
@@ -401,6 +424,10 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">display_output</span>() {
+        <span class="macro">assert_eq!</span>(<span class="ident">Quality::ZERO</span>.<span class="ident">to_string</span>(), <span class="string">&quot;0&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Quality::MIN</span>.<span class="ident">to_string</span>(), <span class="string">&quot;0.001&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Quality::MAX</span>.<span class="ident">to_string</span>(), <span class="string">&quot;1&quot;</span>);
+
         <span class="macro">assert_eq!</span>(<span class="ident">q</span>(<span class="number">0.0</span>).<span class="ident">to_string</span>(), <span class="string">&quot;0&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">q</span>(<span class="number">1.0</span>).<span class="ident">to_string</span>(), <span class="string">&quot;1&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">q</span>(<span class="number">0.001</span>).<span class="ident">to_string</span>(), <span class="string">&quot;0.001&quot;</span>);
@@ -429,5 +456,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (83b15bfe1 2021-12-28)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
 </body></html>
