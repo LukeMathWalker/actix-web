@@ -302,7 +302,7 @@
     <span class="kw">use</span> <span class="ident">futures_core::ready</span>;
     <span class="kw">use</span> <span class="ident">futures_util</span>::{<span class="ident">stream</span>, <span class="ident">FutureExt</span> <span class="kw">as</span> <span class="kw">_</span>};
     <span class="kw">use</span> <span class="ident">pin_project_lite::pin_project</span>;
-    <span class="kw">use</span> <span class="ident">static_assertions</span>::{<span class="ident">assert_impl_all</span>, <span class="ident">assert_not_impl_all</span>};
+    <span class="kw">use</span> <span class="ident">static_assertions</span>::{<span class="ident">assert_impl_all</span>, <span class="ident">assert_not_impl_any</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::body::to_bytes</span>;
@@ -313,10 +313,10 @@
     <span class="macro">assert_impl_all!</span>(<span class="ident">BodyStream</span><span class="op">&lt;</span><span class="ident">stream::Empty</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Infallible</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
     <span class="macro">assert_impl_all!</span>(<span class="ident">BodyStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Infallible</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
 
-    <span class="macro">assert_not_impl_all!</span>(<span class="ident">BodyStream</span><span class="op">&lt;</span><span class="ident">stream::Empty</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
-    <span class="macro">assert_not_impl_all!</span>(<span class="ident">BodyStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
+    <span class="macro">assert_not_impl_any!</span>(<span class="ident">BodyStream</span><span class="op">&lt;</span><span class="ident">stream::Empty</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
+    <span class="macro">assert_not_impl_any!</span>(<span class="ident">BodyStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
     <span class="comment">// crate::Error is not Clone</span>
-    <span class="macro">assert_not_impl_all!</span>(<span class="ident">BodyStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
+    <span class="macro">assert_not_impl_any!</span>(<span class="ident">BodyStream</span><span class="op">&lt;</span><span class="ident">stream::Repeat</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>: <span class="ident">MessageBody</span>);
 
     <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">skips_empty_chunks</span>() {
@@ -436,5 +436,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

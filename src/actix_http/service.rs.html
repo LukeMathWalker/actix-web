@@ -647,6 +647,40 @@
 <span id="640">640</span>
 <span id="641">641</span>
 <span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fmt</span>,
     <span class="ident">future::Future</span>,
@@ -668,9 +702,8 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">body</span>::{<span class="ident">BoxBody</span>, <span class="ident">MessageBody</span>},
     <span class="ident">builder::HttpServiceBuilder</span>,
-    <span class="ident">config</span>::{<span class="ident">KeepAlive</span>, <span class="ident">ServiceConfig</span>},
     <span class="ident">error::DispatchError</span>,
-    <span class="ident">h1</span>, <span class="ident">h2</span>, <span class="ident">ConnectCallback</span>, <span class="ident">OnConnectData</span>, <span class="ident">Protocol</span>, <span class="ident">Request</span>, <span class="ident">Response</span>,
+    <span class="ident">h1</span>, <span class="ident">ConnectCallback</span>, <span class="ident">OnConnectData</span>, <span class="ident">Protocol</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">ServiceConfig</span>,
 };
 
 <span class="doccomment">/// A `ServiceFactory` for HTTP/1.1 or HTTP/2 protocol.</span>
@@ -692,9 +725,9 @@
     <span class="op">&lt;</span><span class="ident">S::Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="doccomment">/// Create builder for `HttpService` instance.</span>
+    <span class="doccomment">/// Constructs builder for `HttpService` instance.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>() -&gt; <span class="ident">HttpServiceBuilder</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span><span class="op">&gt;</span> {
-        <span class="ident">HttpServiceBuilder::new</span>()
+        <span class="ident">HttpServiceBuilder::default</span>()
     }
 }
 
@@ -707,12 +740,10 @@
     <span class="op">&lt;</span><span class="ident">S::Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="doccomment">/// Create new `HttpService` instance.</span>
+    <span class="doccomment">/// Constructs new `HttpService` instance from service with default config.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">service</span>: <span class="ident">F</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig::new</span>(<span class="ident">KeepAlive::Timeout</span>(<span class="number">5</span>), <span class="number">5000</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
-
         <span class="ident">HttpService</span> {
-            <span class="ident">cfg</span>,
+            <span class="ident">cfg</span>: <span class="ident">ServiceConfig::default</span>(),
             <span class="ident">srv</span>: <span class="ident">service</span>.<span class="ident">into_factory</span>(),
             <span class="ident">expect</span>: <span class="ident">h1::ExpectHandler</span>,
             <span class="ident">upgrade</span>: <span class="prelude-val">None</span>,
@@ -721,7 +752,7 @@
         }
     }
 
-    <span class="doccomment">/// Create new `HttpService` instance with config.</span>
+    <span class="doccomment">/// Constructs new `HttpService` instance from config and service.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_config</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
         <span class="ident">service</span>: <span class="ident">F</span>,
@@ -746,11 +777,10 @@
     <span class="op">&lt;</span><span class="ident">S::Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
 {
-    <span class="doccomment">/// Provide service for `EXPECT: 100-Continue` support.</span>
+    <span class="doccomment">/// Sets service for `Expect: 100-Continue` handling.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Service get called with request that contains `EXPECT` header.</span>
-    <span class="doccomment">/// Service must return request in case of success, in that case</span>
-    <span class="doccomment">/// request will be forwarded to main service.</span>
+    <span class="doccomment">/// An expect service is called with requests that contain an `Expect` header. A successful</span>
+    <span class="doccomment">/// response type is also a request which will be forwarded to the main service.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expect</span><span class="op">&lt;</span><span class="ident">X1</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">expect</span>: <span class="ident">X1</span>) -&gt; <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X1</span>, <span class="ident">U</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">X1</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
@@ -767,10 +797,10 @@
         }
     }
 
-    <span class="doccomment">/// Provide service for custom `Connection: UPGRADE` support.</span>
+    <span class="doccomment">/// Sets service for custom `Connection: Upgrade` handling.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// If service is provided then normal requests handling get halted</span>
-    <span class="doccomment">/// and this service get called with original request and framed object.</span>
+    <span class="doccomment">/// If service is provided then normal requests handling get halted and this service get called</span>
+    <span class="doccomment">/// with original request and framed object.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span><span class="op">&lt;</span><span class="ident">U1</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U1</span><span class="op">&gt;</span>) -&gt; <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U1</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">U1</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">h1::Codec</span><span class="op">&gt;</span>), <span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
@@ -1155,10 +1185,11 @@
         <span class="kw">let</span> <span class="ident">conn_data</span> <span class="op">=</span> <span class="ident">OnConnectData::from_io</span>(<span class="kw-2">&amp;</span><span class="ident">io</span>, <span class="self">self</span>.<span class="ident">on_connect_ext</span>.<span class="ident">as_deref</span>());
 
         <span class="kw">match</span> <span class="ident">proto</span> {
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http2&quot;</span>)]</span>
             <span class="ident">Protocol::Http2</span> =&gt; <span class="ident">HttpServiceHandlerResponse</span> {
                 <span class="ident">state</span>: <span class="ident">State::H2Handshake</span> {
                     <span class="ident">handshake</span>: <span class="prelude-val">Some</span>((
-                        <span class="ident">h2::handshake_with_timeout</span>(<span class="ident">io</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cfg</span>),
+                        <span class="ident"><span class="kw">crate</span>::h2::handshake_with_timeout</span>(<span class="ident">io</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cfg</span>),
                         <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">clone</span>(),
                         <span class="self">self</span>.<span class="ident">flow</span>.<span class="ident">clone</span>(),
                         <span class="ident">conn_data</span>,
@@ -1166,6 +1197,11 @@
                     )),
                 },
             },
+
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http2&quot;</span>))]</span>
+            <span class="ident">Protocol::Http2</span> =&gt; {
+                <span class="macro">panic!</span>(<span class="string">&quot;HTTP/2 support is disabled (enable with the `http2` feature flag)&quot;</span>)
+            }
 
             <span class="ident">Protocol::Http1</span> =&gt; <span class="ident">HttpServiceHandlerResponse</span> {
                 <span class="ident">state</span>: <span class="ident">State::H1</span> {
@@ -1184,6 +1220,7 @@
     }
 }
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http2&quot;</span>))]</span>
 <span class="macro">pin_project!</span> {
     <span class="attribute">#[<span class="ident">project</span> <span class="op">=</span> <span class="ident">StateProj</span>]</span>
     <span class="kw">enum</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
@@ -1205,10 +1242,37 @@
         <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span>,
     {
         <span class="ident">H1</span> { <span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">dispatcher</span>: <span class="ident">h1::Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> },
-        <span class="ident">H2</span> { <span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">dispatcher</span>: <span class="ident">h2::Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> },
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http2&quot;</span>)]</span>
+<span class="macro">pin_project!</span> {
+    <span class="attribute">#[<span class="ident">project</span> <span class="op">=</span> <span class="ident">StateProj</span>]</span>
+    <span class="kw">enum</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">T</span>: <span class="ident">AsyncRead</span>,
+        <span class="ident">T</span>: <span class="ident">AsyncWrite</span>,
+        <span class="ident">T</span>: <span class="ident">Unpin</span>,
+
+        <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span>,
+        <span class="ident">S::Future</span>: <span class="lifetime">&#39;static</span>,
+        <span class="ident">S::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">BoxBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+
+        <span class="ident">B</span>: <span class="ident">MessageBody</span>,
+
+        <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
+        <span class="ident">X::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">BoxBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+
+        <span class="ident">U</span>: <span class="ident">Service</span><span class="op">&lt;</span>(<span class="ident">Request</span>, <span class="ident">Framed</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">h1::Codec</span><span class="op">&gt;</span>), <span class="ident">Response</span> <span class="op">=</span> ()<span class="op">&gt;</span>,
+        <span class="ident">U::Error</span>: <span class="ident">fmt::Display</span>,
+    {
+        <span class="ident">H1</span> { <span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">dispatcher</span>: <span class="ident">h1::Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> },
+
+        <span class="ident">H2</span> { <span class="attribute">#[<span class="ident">pin</span>]</span> <span class="ident">dispatcher</span>: <span class="ident"><span class="kw">crate</span>::h2::Dispatcher</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> },
+
         <span class="ident">H2Handshake</span> {
             <span class="ident">handshake</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(
-                <span class="ident">h2::HandshakeWithTimeout</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+                <span class="ident"><span class="kw">crate</span>::h2::HandshakeWithTimeout</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
                 <span class="ident">ServiceConfig</span>,
                 <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">HttpFlow</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
                 <span class="ident">OnConnectData</span>,
@@ -1267,21 +1331,25 @@
     <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">Poll</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Output</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>().<span class="ident">state</span>.<span class="ident">project</span>() {
             <span class="ident">StateProj::H1</span> { <span class="ident">dispatcher</span> } =&gt; <span class="ident">dispatcher</span>.<span class="ident">poll</span>(<span class="ident">cx</span>),
+
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http2&quot;</span>)]</span>
             <span class="ident">StateProj::H2</span> { <span class="ident">dispatcher</span> } =&gt; <span class="ident">dispatcher</span>.<span class="ident">poll</span>(<span class="ident">cx</span>),
+
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http2&quot;</span>)]</span>
             <span class="ident">StateProj::H2Handshake</span> { <span class="ident">handshake</span>: <span class="ident">data</span> } =&gt; {
                 <span class="kw">match</span> <span class="macro">ready!</span>(<span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">data</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>().<span class="number">0</span>).<span class="ident">poll</span>(<span class="ident">cx</span>)) {
                     <span class="prelude-val">Ok</span>((<span class="ident">conn</span>, <span class="ident">timer</span>)) =&gt; {
                         <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">config</span>, <span class="ident">flow</span>, <span class="ident">conn_data</span>, <span class="ident">peer_addr</span>) <span class="op">=</span> <span class="ident">data</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
 
                         <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>().<span class="ident">state</span>.<span class="ident">set</span>(<span class="ident">State::H2</span> {
-                            <span class="ident">dispatcher</span>: <span class="ident">h2::Dispatcher::new</span>(
+                            <span class="ident">dispatcher</span>: <span class="ident"><span class="kw">crate</span>::h2::Dispatcher::new</span>(
                                 <span class="ident">conn</span>, <span class="ident">flow</span>, <span class="ident">config</span>, <span class="ident">peer_addr</span>, <span class="ident">conn_data</span>, <span class="ident">timer</span>,
                             ),
                         });
                         <span class="self">self</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)
                     }
                     <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
-                        <span class="macro">trace!</span>(<span class="string">&quot;H2 handshake error: {}&quot;</span>, <span class="ident">err</span>);
+                        <span class="macro">log::trace!</span>(<span class="string">&quot;H2 handshake error: {}&quot;</span>, <span class="ident">err</span>);
                         <span class="ident">Poll::Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>))
                     }
                 }
@@ -1290,5 +1358,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

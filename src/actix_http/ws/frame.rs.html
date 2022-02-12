@@ -382,14 +382,18 @@
 <span id="375">375</span>
 <span id="376">376</span>
 <span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
 
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Buf</span>, <span class="ident">BufMut</span>, <span class="ident">BytesMut</span>};
 <span class="kw">use</span> <span class="ident">log::debug</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ws::mask::apply_mask</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ws::proto</span>::{<span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">OpCode</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ws::ProtocolError</span>;
+<span class="kw">use</span> <span class="kw">super</span>::{
+    <span class="ident">mask::apply_mask</span>,
+    <span class="ident">proto</span>::{<span class="ident">CloseCode</span>, <span class="ident">CloseReason</span>, <span class="ident">OpCode</span>},
+    <span class="ident">ProtocolError</span>,
+};
 
 <span class="doccomment">/// A struct representing a WebSocket frame.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -760,5 +764,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

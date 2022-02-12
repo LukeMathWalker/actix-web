@@ -86,15 +86,13 @@
 <span id="79">79</span>
 <span id="80">80</span>
 <span id="81">81</span>
-<span id="82">82</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">io::Write</span>, <span class="ident">str::FromStr</span>, <span class="ident">time::SystemTime</span>};
 
 <span class="kw">use</span> <span class="ident">bytes::BytesMut</span>;
 <span class="kw">use</span> <span class="ident">http::header</span>::{<span class="ident">HeaderValue</span>, <span class="ident">InvalidHeaderValue</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">config::DATE_VALUE_LENGTH</span>, <span class="ident">error::ParseError</span>, <span class="ident">header::TryIntoHeaderValue</span>,
-    <span class="ident">helpers::MutWriter</span>,
+    <span class="ident">date::DATE_VALUE_LENGTH</span>, <span class="ident">error::ParseError</span>, <span class="ident">header::TryIntoHeaderValue</span>, <span class="ident">helpers::MutWriter</span>,
 };
 
 <span class="doccomment">/// A timestamp with HTTP-style formatting and parsing.</span>
@@ -170,5 +168,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

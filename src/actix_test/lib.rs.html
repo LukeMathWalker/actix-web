@@ -729,7 +729,7 @@
             <span class="kw">let</span> <span class="ident">local_addr</span> <span class="op">=</span> <span class="ident">tcp</span>.<span class="ident">local_addr</span>().<span class="ident">unwrap</span>();
             <span class="kw">let</span> <span class="ident">factory</span> <span class="op">=</span> <span class="ident">factory</span>.<span class="ident">clone</span>();
             <span class="kw">let</span> <span class="ident">srv_cfg</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">clone</span>();
-            <span class="kw">let</span> <span class="ident">timeout</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">client_timeout</span>;
+            <span class="kw">let</span> <span class="ident">timeout</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">client_request_timeout</span>;
 
             <span class="kw">let</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">Server::build</span>().<span class="ident">workers</span>(<span class="number">1</span>).<span class="ident">disable_signals</span>().<span class="ident">system_exit</span>();
 
@@ -747,7 +747,7 @@
                             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">error_response</span>());
 
                         <span class="ident">HttpService::build</span>()
-                            .<span class="ident">client_timeout</span>(<span class="ident">timeout</span>)
+                            .<span class="ident">client_request_timeout</span>(<span class="ident">timeout</span>)
                             .<span class="ident">h1</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">app_cfg</span>.<span class="ident">clone</span>()))
                             .<span class="ident">tcp</span>()
                     }),
@@ -763,7 +763,7 @@
                             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">error_response</span>());
 
                         <span class="ident">HttpService::build</span>()
-                            .<span class="ident">client_timeout</span>(<span class="ident">timeout</span>)
+                            .<span class="ident">client_request_timeout</span>(<span class="ident">timeout</span>)
                             .<span class="ident">h2</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">app_cfg</span>.<span class="ident">clone</span>()))
                             .<span class="ident">tcp</span>()
                     }),
@@ -779,7 +779,7 @@
                             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">error_response</span>());
 
                         <span class="ident">HttpService::build</span>()
-                            .<span class="ident">client_timeout</span>(<span class="ident">timeout</span>)
+                            .<span class="ident">client_request_timeout</span>(<span class="ident">timeout</span>)
                             .<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">app_cfg</span>.<span class="ident">clone</span>()))
                             .<span class="ident">tcp</span>()
                     }),
@@ -798,7 +798,7 @@
                             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">error_response</span>());
 
                         <span class="ident">HttpService::build</span>()
-                            .<span class="ident">client_timeout</span>(<span class="ident">timeout</span>)
+                            .<span class="ident">client_request_timeout</span>(<span class="ident">timeout</span>)
                             .<span class="ident">h1</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">app_cfg</span>.<span class="ident">clone</span>()))
                             .<span class="ident">openssl</span>(<span class="ident">acceptor</span>.<span class="ident">clone</span>())
                     }),
@@ -814,7 +814,7 @@
                             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">error_response</span>());
 
                         <span class="ident">HttpService::build</span>()
-                            .<span class="ident">client_timeout</span>(<span class="ident">timeout</span>)
+                            .<span class="ident">client_request_timeout</span>(<span class="ident">timeout</span>)
                             .<span class="ident">h2</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">app_cfg</span>.<span class="ident">clone</span>()))
                             .<span class="ident">openssl</span>(<span class="ident">acceptor</span>.<span class="ident">clone</span>())
                     }),
@@ -830,7 +830,7 @@
                             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">error_response</span>());
 
                         <span class="ident">HttpService::build</span>()
-                            .<span class="ident">client_timeout</span>(<span class="ident">timeout</span>)
+                            .<span class="ident">client_request_timeout</span>(<span class="ident">timeout</span>)
                             .<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">app_cfg</span>.<span class="ident">clone</span>()))
                             .<span class="ident">openssl</span>(<span class="ident">acceptor</span>.<span class="ident">clone</span>())
                     }),
@@ -849,7 +849,7 @@
                             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">error_response</span>());
 
                         <span class="ident">HttpService::build</span>()
-                            .<span class="ident">client_timeout</span>(<span class="ident">timeout</span>)
+                            .<span class="ident">client_request_timeout</span>(<span class="ident">timeout</span>)
                             .<span class="ident">h1</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">app_cfg</span>.<span class="ident">clone</span>()))
                             .<span class="ident">rustls</span>(<span class="ident">config</span>.<span class="ident">clone</span>())
                     }),
@@ -865,7 +865,7 @@
                             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">error_response</span>());
 
                         <span class="ident">HttpService::build</span>()
-                            .<span class="ident">client_timeout</span>(<span class="ident">timeout</span>)
+                            .<span class="ident">client_request_timeout</span>(<span class="ident">timeout</span>)
                             .<span class="ident">h2</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">app_cfg</span>.<span class="ident">clone</span>()))
                             .<span class="ident">rustls</span>(<span class="ident">config</span>.<span class="ident">clone</span>())
                     }),
@@ -881,7 +881,7 @@
                             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">error_response</span>());
 
                         <span class="ident">HttpService::build</span>()
-                            .<span class="ident">client_timeout</span>(<span class="ident">timeout</span>)
+                            .<span class="ident">client_request_timeout</span>(<span class="ident">timeout</span>)
                             .<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">app_cfg</span>.<span class="ident">clone</span>()))
                             .<span class="ident">rustls</span>(<span class="ident">config</span>.<span class="ident">clone</span>())
                     }),
@@ -968,7 +968,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TestServerConfig</span> {
     <span class="ident">tp</span>: <span class="ident">HttpVer</span>,
     <span class="ident">stream</span>: <span class="ident">StreamType</span>,
-    <span class="ident">client_timeout</span>: <span class="ident">u64</span>,
+    <span class="ident">client_request_timeout</span>: <span class="ident">Duration</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">TestServerConfig</span> {
@@ -983,7 +983,7 @@
         <span class="ident">TestServerConfig</span> {
             <span class="ident">tp</span>: <span class="ident">HttpVer::Both</span>,
             <span class="ident">stream</span>: <span class="ident">StreamType::Tcp</span>,
-            <span class="ident">client_timeout</span>: <span class="number">5000</span>,
+            <span class="ident">client_request_timeout</span>: <span class="ident">Duration::from_secs</span>(<span class="number">5</span>),
         }
     }
 
@@ -1013,9 +1013,9 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Set client timeout in milliseconds for first request.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_timeout</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">client_timeout</span> <span class="op">=</span> <span class="ident">val</span>;
+    <span class="doccomment">/// Set client timeout for first request.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_request_timeout</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">dur</span>: <span class="ident">Duration</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">client_request_timeout</span> <span class="op">=</span> <span class="ident">dur</span>;
         <span class="self">self</span>
     }
 }
@@ -1154,5 +1154,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_test" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_test" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

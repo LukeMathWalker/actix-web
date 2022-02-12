@@ -670,6 +670,7 @@
 <span id="663">663</span>
 <span id="664">664</span>
 <span id="665">665</span>
+<span id="666">666</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cmp</span>,
     <span class="ident">io</span>::{<span class="self">self</span>, <span class="ident">Write</span> <span class="kw">as</span> <span class="kw">_</span>},
@@ -882,13 +883,13 @@
             <span class="ident">dst</span>.<span class="ident">advance_mut</span>(<span class="ident">pos</span>);
         }
 
-        <span class="comment">// optimized date header, set_date writes \r\n</span>
         <span class="kw">if</span> <span class="op">!</span><span class="ident">has_date</span> {
-            <span class="ident">config</span>.<span class="ident">set_date</span>(<span class="ident">dst</span>, <span class="ident">camel_case</span>);
-        } <span class="kw">else</span> {
-            <span class="comment">// msg eof</span>
-            <span class="ident">dst</span>.<span class="ident">extend_from_slice</span>(<span class="string">b&quot;\r\n&quot;</span>);
+            <span class="comment">// optimized date header, write_date_header writes its own \r\n</span>
+            <span class="ident">config</span>.<span class="ident">write_date_header</span>(<span class="ident">dst</span>, <span class="ident">camel_case</span>);
         }
+
+        <span class="comment">// end-of-headers marker</span>
+        <span class="ident">dst</span>.<span class="ident">extend_from_slice</span>(<span class="string">b&quot;\r\n&quot;</span>);
 
         <span class="prelude-val">Ok</span>(())
     }
@@ -990,16 +991,17 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">MessageType</span><span class="op">&gt;</span> <span class="ident">MessageEncoder</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Encode message</span>
+    <span class="doccomment">/// Encode chunk.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_chunk</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">msg</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> <span class="ident">BytesMut</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">te</span>.<span class="ident">encode</span>(<span class="ident">msg</span>, <span class="ident">buf</span>)
     }
 
-    <span class="doccomment">/// Encode eof</span>
+    <span class="doccomment">/// Encode EOF.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_eof</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;mut</span> <span class="ident">BytesMut</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">te</span>.<span class="ident">encode_eof</span>(<span class="ident">buf</span>)
     }
 
+    <span class="doccomment">/// Encode message.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">dst</span>: <span class="kw-2">&amp;mut</span> <span class="ident">BytesMut</span>,
@@ -1336,5 +1338,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

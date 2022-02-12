@@ -4,7 +4,7 @@
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../../../actix_web/index.html"><div class="logo-container">
                     <img src="https://actix.rs/img/logo.png" alt="logo"></div>
-        </a><div class="sidebar-elems"><h2 class="location">In <a href="../../index.html">actix_web</a>::<wbr><a href="../index.html">rt</a>::<wbr><a href="index.html">signal</a></h2><div id="sidebar-vars" data-name="ctrl_c" data-ty="fn" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../actix_web/index.html">
+        </a><div class="sidebar-elems"><h2 class="location"><a href="index.html">In actix_web::rt::signal</a></h2><div id="sidebar-vars" data-name="ctrl_c" data-ty="fn" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../actix_web/index.html">
                         <img src="https://actix.rs/img/logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
     <h1 class="fqn"><span class="in-band">Function <a href="../../index.html">actix_web</a>::<wbr><a href="../index.html">rt</a>::<wbr><a href="index.html">signal</a>::<wbr><a class="fn" href="#">ctrl_c</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><div class="docblock item-decl"><pre class="rust fn"><code>pub async fn ctrl_c() -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html" title="struct std::io::error::Error">Error</a>&gt;</code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Completes when a “ctrl-c” notification is sent to the process.</p>
 <p>While signals are handled very differently between Unix and Windows, both
@@ -13,7 +13,7 @@ portable API for receiving this notification.</p>
 <p>Once the returned future is polled, a listener is registered. The future
 will complete on the first received <code>ctrl-c</code> <strong>after</strong> the initial call to
 either <code>Future::poll</code> or <code>.await</code>.</p>
-<h2 id="caveats" class="section-header"><a href="#caveats">Caveats</a></h2>
+<h2 id="caveats"><a href="#caveats">Caveats</a></h2>
 <p>On Unix platforms, the first time that a <code>Signal</code> instance is registered for a
 particular signal kind, an OS signal-handler is installed which replaces the
 default platform behavior when that signal is received, <strong>for the duration of
@@ -27,7 +27,7 @@ deliveries will end up captured by Tokio, and the default platform behavior
 will NOT be reset</strong>.</p>
 <p>Thus, applications should take care to ensure the expected signal behavior
 occurs as expected after listening for specific signals.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">tokio::signal</span>;
 
 <span class="attribute">#[<span class="ident">tokio::main</span>]</span>
@@ -44,5 +44,5 @@ occurs as expected after listening for specific signals.</p>
     <span class="ident">tokio::signal::ctrl_c</span>().<span class="kw">await</span>.<span class="ident">unwrap</span>();
     <span class="comment">// Your handler here</span>
 });</code></pre></div>
-</div></details></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</div></details></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

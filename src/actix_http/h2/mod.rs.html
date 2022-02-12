@@ -116,6 +116,8 @@
 <span id="109">109</span>
 <span id="110">110</span>
 <span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
 </pre><pre class="rust"><code><span class="doccomment">//! HTTP/2 protocol.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -125,7 +127,7 @@
 };
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>};
-<span class="kw">use</span> <span class="ident">actix_rt::time::Sleep</span>;
+<span class="kw">use</span> <span class="ident">actix_rt::time</span>::{<span class="ident">sleep_until</span>, <span class="ident">Sleep</span>};
 <span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures_core</span>::{<span class="ident">ready</span>, <span class="ident">Stream</span>};
 <span class="kw">use</span> <span class="ident">h2</span>::{
@@ -133,16 +135,16 @@
     <span class="ident">RecvStream</span>,
 };
 
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">config::ServiceConfig</span>,
+    <span class="ident">error</span>::{<span class="ident">DispatchError</span>, <span class="ident">PayloadError</span>},
+};
+
 <span class="kw">mod</span> <span class="ident">dispatcher</span>;
 <span class="kw">mod</span> <span class="ident">service</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::dispatcher::Dispatcher</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::service::H2Service</span>;
-
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">config::ServiceConfig</span>,
-    <span class="ident">error</span>::{<span class="ident">DispatchError</span>, <span class="ident">PayloadError</span>},
-};
 
 <span class="doccomment">/// HTTP/2 peer stream.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Payload</span> {
@@ -185,7 +187,9 @@
 {
     <span class="ident">HandshakeWithTimeout</span> {
         <span class="ident">handshake</span>: <span class="ident">handshake</span>(<span class="ident">io</span>),
-        <span class="ident">timer</span>: <span class="ident">config</span>.<span class="ident">client_timer</span>().<span class="ident">map</span>(<span class="ident">Box::pin</span>),
+        <span class="ident">timer</span>: <span class="ident">config</span>
+            .<span class="ident">client_request_deadline</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">deadline</span><span class="op">|</span> <span class="ident">Box::pin</span>(<span class="ident">sleep_until</span>(<span class="ident">deadline</span>.<span class="ident">into</span>()))),
     }
 }
 
@@ -204,7 +208,7 @@
         <span class="kw">let</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span>();
 
         <span class="kw">match</span> <span class="ident">Pin::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">this</span>.<span class="ident">handshake</span>).<span class="ident">poll</span>(<span class="ident">cx</span>)<span class="question-mark">?</span> {
-            <span class="comment">// return the timer on success handshake. It can be re-used for h2 ping-pong.</span>
+            <span class="comment">// return the timer on success handshake; its slot can be re-used for h2 ping-pong</span>
             <span class="ident">Poll::Ready</span>(<span class="ident">conn</span>) =&gt; <span class="ident">Poll::Ready</span>(<span class="prelude-val">Ok</span>((<span class="ident">conn</span>, <span class="ident">this</span>.<span class="ident">timer</span>.<span class="ident">take</span>()))),
             <span class="ident">Poll::Pending</span> =&gt; <span class="kw">match</span> <span class="ident">this</span>.<span class="ident">timer</span>.<span class="ident">as_mut</span>() {
                 <span class="prelude-val">Some</span>(<span class="ident">timer</span>) =&gt; {
@@ -228,5 +232,5 @@
     <span class="macro">assert_impl_all!</span>(<span class="ident">Payload</span>: <span class="ident">Unpin</span>, <span class="ident">Send</span>, <span class="ident">Sync</span>, <span class="ident">UnwindSafe</span>, <span class="ident">RefUnwindSafe</span>);
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

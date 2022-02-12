@@ -864,7 +864,7 @@
             <span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
         {
             <span class="kw">let</span> <span class="ident">decoded</span> <span class="op">=</span> <span class="ident">FULL_QUOTER</span>
-                .<span class="ident">with</span>(<span class="op">|</span><span class="ident">q</span><span class="op">|</span> <span class="ident">q</span>.<span class="ident">requote</span>(<span class="self">self</span>.<span class="ident">value</span>.<span class="ident">as_bytes</span>()))
+                .<span class="ident">with</span>(<span class="op">|</span><span class="ident">q</span><span class="op">|</span> <span class="ident">q</span>.<span class="ident">requote_str_lossy</span>(<span class="self">self</span>.<span class="ident">value</span>))
                 .<span class="ident">map</span>(<span class="ident">Cow::Owned</span>)
                 .<span class="ident">unwrap_or</span>(<span class="ident">Cow::Borrowed</span>(<span class="self">self</span>.<span class="ident">value</span>));
 
@@ -1144,7 +1144,7 @@
     <span class="kw">where</span>
         <span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
     {
-        <span class="kw">match</span> <span class="ident">FULL_QUOTER</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">q</span><span class="op">|</span> <span class="ident">q</span>.<span class="ident">requote</span>(<span class="self">self</span>.<span class="ident">value</span>.<span class="ident">as_bytes</span>())) {
+        <span class="kw">match</span> <span class="ident">FULL_QUOTER</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">q</span><span class="op">|</span> <span class="ident">q</span>.<span class="ident">requote_str_lossy</span>(<span class="self">self</span>.<span class="ident">value</span>)) {
             <span class="prelude-val">Some</span>(<span class="ident">s</span>) =&gt; <span class="ident">visitor</span>.<span class="ident">visit_string</span>(<span class="ident">s</span>),
             <span class="prelude-val">None</span> =&gt; <span class="ident">visitor</span>.<span class="ident">visit_borrowed_str</span>(<span class="self">self</span>.<span class="ident">value</span>),
         }
@@ -1154,7 +1154,7 @@
     <span class="kw">where</span>
         <span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
     {
-        <span class="kw">match</span> <span class="ident">FULL_QUOTER</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">q</span><span class="op">|</span> <span class="ident">q</span>.<span class="ident">requote</span>(<span class="self">self</span>.<span class="ident">value</span>.<span class="ident">as_bytes</span>())) {
+        <span class="kw">match</span> <span class="ident">FULL_QUOTER</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">q</span><span class="op">|</span> <span class="ident">q</span>.<span class="ident">requote_str_lossy</span>(<span class="self">self</span>.<span class="ident">value</span>)) {
             <span class="prelude-val">Some</span>(<span class="ident">s</span>) =&gt; <span class="ident">visitor</span>.<span class="ident">visit_byte_buf</span>(<span class="ident">s</span>.<span class="ident">into</span>()),
             <span class="prelude-val">None</span> =&gt; <span class="ident">visitor</span>.<span class="ident">visit_borrowed_bytes</span>(<span class="self">self</span>.<span class="ident">value</span>.<span class="ident">as_bytes</span>()),
         }
@@ -1616,5 +1616,5 @@
     <span class="comment">// }</span>
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_router" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_router" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

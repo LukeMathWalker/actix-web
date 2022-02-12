@@ -398,11 +398,11 @@
         <span class="ident">conn_data</span>: <span class="ident">OnConnectData</span>,
         <span class="ident">timer</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Pin</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Sleep</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">ping_pong</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">keep_alive</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">dur</span><span class="op">|</span> <span class="ident">H2PingPong</span> {
+        <span class="kw">let</span> <span class="ident">ping_pong</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">keep_alive</span>().<span class="ident">duration</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">dur</span><span class="op">|</span> <span class="ident">H2PingPong</span> {
             <span class="ident">timer</span>: <span class="ident">timer</span>
                 .<span class="ident">map</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">timer</span><span class="op">|</span> {
-                    <span class="comment">// reset timer if it&#39;s received from new function.</span>
-                    <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">config</span>.<span class="ident">now</span>() <span class="op">+</span> <span class="ident">dur</span>);
+                    <span class="comment">// reuse timer slot if it was initialized for handshake</span>
+                    <span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>((<span class="ident">config</span>.<span class="ident">now</span>() <span class="op">+</span> <span class="ident">dur</span>).<span class="ident">into</span>());
                     <span class="ident">timer</span>
                 })
                 .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Box::pin</span>(<span class="ident">sleep</span>(<span class="ident">dur</span>))),
@@ -482,7 +482,7 @@
                                 <span class="ident">DispatchError::SendResponse</span>(<span class="ident">err</span>) =&gt; {
                                     <span class="macro">trace!</span>(<span class="string">&quot;Error sending HTTP/2 response: {:?}&quot;</span>, <span class="ident">err</span>)
                                 }
-                                <span class="ident">DispatchError::SendData</span>(<span class="ident">err</span>) =&gt; <span class="macro">warn!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">err</span>),
+                                <span class="ident">DispatchError::SendData</span>(<span class="ident">err</span>) =&gt; <span class="macro">log::warn!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">err</span>),
                                 <span class="ident">DispatchError::ResponseBody</span>(<span class="ident">err</span>) =&gt; {
                                     <span class="macro">error!</span>(<span class="string">&quot;Response payload stream error: {:?}&quot;</span>, <span class="ident">err</span>)
                                 }
@@ -501,8 +501,8 @@
                                 <span class="ident">Poll::Ready</span>(<span class="kw">_</span>) =&gt; {
                                     <span class="ident">ping_pong</span>.<span class="ident">on_flight</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
-                                    <span class="kw">let</span> <span class="ident">dead_line</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">config</span>.<span class="ident">keep_alive_expire</span>().<span class="ident">unwrap</span>();
-                                    <span class="ident">ping_pong</span>.<span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">dead_line</span>);
+                                    <span class="kw">let</span> <span class="ident">dead_line</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">config</span>.<span class="ident">keep_alive_deadline</span>().<span class="ident">unwrap</span>();
+                                    <span class="ident">ping_pong</span>.<span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">dead_line</span>.<span class="ident">into</span>());
                                 }
                                 <span class="ident">Poll::Pending</span> =&gt; {
                                     <span class="kw">return</span> <span class="ident">ping_pong</span>.<span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()))
@@ -515,8 +515,8 @@
 
                             <span class="ident">ping_pong</span>.<span class="ident">ping_pong</span>.<span class="ident">send_ping</span>(<span class="ident">Ping::opaque</span>())<span class="question-mark">?</span>;
 
-                            <span class="kw">let</span> <span class="ident">dead_line</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">config</span>.<span class="ident">keep_alive_expire</span>().<span class="ident">unwrap</span>();
-                            <span class="ident">ping_pong</span>.<span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">dead_line</span>);
+                            <span class="kw">let</span> <span class="ident">dead_line</span> <span class="op">=</span> <span class="ident">this</span>.<span class="ident">config</span>.<span class="ident">keep_alive_deadline</span>().<span class="ident">unwrap</span>();
+                            <span class="ident">ping_pong</span>.<span class="ident">timer</span>.<span class="ident">as_mut</span>().<span class="ident">reset</span>(<span class="ident">dead_line</span>.<span class="ident">into</span>());
 
                             <span class="ident">ping_pong</span>.<span class="ident">on_flight</span> <span class="op">=</span> <span class="bool-val">true</span>;
                         }
@@ -663,7 +663,7 @@
     <span class="comment">// set date header</span>
     <span class="kw">if</span> <span class="op">!</span><span class="ident">has_date</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">BytesMut::with_capacity</span>(<span class="number">29</span>);
-        <span class="ident">config</span>.<span class="ident">set_date_header</span>(<span class="kw-2">&amp;mut</span> <span class="ident">bytes</span>);
+        <span class="ident">config</span>.<span class="ident">write_date_header_value</span>(<span class="kw-2">&amp;mut</span> <span class="ident">bytes</span>);
         <span class="ident">res</span>.<span class="ident">headers_mut</span>().<span class="ident">insert</span>(
             <span class="ident">DATE</span>,
             <span class="comment">// SAFETY: serialized date-times are known ASCII strings</span>
@@ -674,5 +674,5 @@
     <span class="ident">res</span>
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

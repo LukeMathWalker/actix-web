@@ -798,7 +798,7 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_mut</span>() {
             <span class="ident">Connection::Tcp</span>(<span class="ident">ConnectionType::H1</span>(<span class="ident">conn</span>)) =&gt; <span class="ident">Pin::new</span>(<span class="ident">conn</span>).<span class="ident">poll_write</span>(<span class="ident">cx</span>, <span class="ident">buf</span>),
             <span class="ident">Connection::Tls</span>(<span class="ident">ConnectionType::H1</span>(<span class="ident">conn</span>)) =&gt; <span class="ident">Pin::new</span>(<span class="ident">conn</span>).<span class="ident">poll_write</span>(<span class="ident">cx</span>, <span class="ident">buf</span>),
-            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="ident">H2_UNREACHABLE_WRITE</span>),
+            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">H2_UNREACHABLE_WRITE</span>),
         }
     }
 
@@ -806,7 +806,7 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_mut</span>() {
             <span class="ident">Connection::Tcp</span>(<span class="ident">ConnectionType::H1</span>(<span class="ident">conn</span>)) =&gt; <span class="ident">Pin::new</span>(<span class="ident">conn</span>).<span class="ident">poll_flush</span>(<span class="ident">cx</span>),
             <span class="ident">Connection::Tls</span>(<span class="ident">ConnectionType::H1</span>(<span class="ident">conn</span>)) =&gt; <span class="ident">Pin::new</span>(<span class="ident">conn</span>).<span class="ident">poll_flush</span>(<span class="ident">cx</span>),
-            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="ident">H2_UNREACHABLE_WRITE</span>),
+            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">H2_UNREACHABLE_WRITE</span>),
         }
     }
 
@@ -814,7 +814,7 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_mut</span>() {
             <span class="ident">Connection::Tcp</span>(<span class="ident">ConnectionType::H1</span>(<span class="ident">conn</span>)) =&gt; <span class="ident">Pin::new</span>(<span class="ident">conn</span>).<span class="ident">poll_shutdown</span>(<span class="ident">cx</span>),
             <span class="ident">Connection::Tls</span>(<span class="ident">ConnectionType::H1</span>(<span class="ident">conn</span>)) =&gt; <span class="ident">Pin::new</span>(<span class="ident">conn</span>).<span class="ident">poll_shutdown</span>(<span class="ident">cx</span>),
-            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="ident">H2_UNREACHABLE_WRITE</span>),
+            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">H2_UNREACHABLE_WRITE</span>),
         }
     }
 
@@ -830,7 +830,7 @@
             <span class="ident">Connection::Tls</span>(<span class="ident">ConnectionType::H1</span>(<span class="ident">conn</span>)) =&gt; {
                 <span class="ident">Pin::new</span>(<span class="ident">conn</span>).<span class="ident">poll_write_vectored</span>(<span class="ident">cx</span>, <span class="ident">bufs</span>)
             }
-            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="ident">H2_UNREACHABLE_WRITE</span>),
+            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">H2_UNREACHABLE_WRITE</span>),
         }
     }
 
@@ -838,7 +838,7 @@
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
             <span class="ident">Connection::Tcp</span>(<span class="ident">ConnectionType::H1</span>(<span class="kw-2">ref</span> <span class="ident">conn</span>)) =&gt; <span class="ident">conn</span>.<span class="ident">is_write_vectored</span>(),
             <span class="ident">Connection::Tls</span>(<span class="ident">ConnectionType::H1</span>(<span class="kw-2">ref</span> <span class="ident">conn</span>)) =&gt; <span class="ident">conn</span>.<span class="ident">is_write_vectored</span>(),
-            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="ident">H2_UNREACHABLE_WRITE</span>),
+            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">H2_UNREACHABLE_WRITE</span>),
         }
     }
 }
@@ -914,5 +914,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="awc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

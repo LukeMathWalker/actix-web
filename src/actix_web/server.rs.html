@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/server.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>server.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `actix-web/src/server.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>server.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="https://actix.rs/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../actix_web/index.html"><div class="logo-container"><img src="https://actix.rs/img/logo.png" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -680,12 +680,26 @@
 <span id="673">673</span>
 <span id="674">674</span>
 <span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">any::Any</span>,
     <span class="ident">cmp</span>, <span class="ident">fmt</span>, <span class="ident">io</span>,
     <span class="ident">marker::PhantomData</span>,
     <span class="ident">net</span>,
     <span class="ident">sync</span>::{<span class="ident">Arc</span>, <span class="ident">Mutex</span>},
+    <span class="ident">time::Duration</span>,
 };
 
 <span class="kw">use</span> <span class="ident">actix_http</span>::{<span class="ident">body::MessageBody</span>, <span class="ident">Extensions</span>, <span class="ident">HttpService</span>, <span class="ident">KeepAlive</span>, <span class="ident">Request</span>, <span class="ident">Response</span>};
@@ -709,8 +723,8 @@
 <span class="kw">struct</span> <span class="ident">Config</span> {
     <span class="ident">host</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="ident">keep_alive</span>: <span class="ident">KeepAlive</span>,
-    <span class="ident">client_timeout</span>: <span class="ident">u64</span>,
-    <span class="ident">client_shutdown</span>: <span class="ident">u64</span>,
+    <span class="ident">client_request_timeout</span>: <span class="ident">Duration</span>,
+    <span class="ident">client_disconnect_timeout</span>: <span class="ident">Duration</span>,
 }
 
 <span class="doccomment">/// An HTTP Server.</span>
@@ -770,9 +784,9 @@
             <span class="ident">factory</span>,
             <span class="ident">config</span>: <span class="ident">Arc::new</span>(<span class="ident">Mutex::new</span>(<span class="ident">Config</span> {
                 <span class="ident">host</span>: <span class="prelude-val">None</span>,
-                <span class="ident">keep_alive</span>: <span class="ident">KeepAlive::Timeout</span>(<span class="number">5</span>),
-                <span class="ident">client_timeout</span>: <span class="number">5000</span>,
-                <span class="ident">client_shutdown</span>: <span class="number">5000</span>,
+                <span class="ident">keep_alive</span>: <span class="ident">KeepAlive::default</span>(),
+                <span class="ident">client_request_timeout</span>: <span class="ident">Duration::from_secs</span>(<span class="number">5</span>),
+                <span class="ident">client_disconnect_timeout</span>: <span class="ident">Duration::from_secs</span>(<span class="number">1</span>),
             })),
             <span class="ident">backlog</span>: <span class="number">1024</span>,
             <span class="ident">sockets</span>: <span class="ident">Vec::new</span>(),
@@ -809,7 +823,7 @@
 
     <span class="doccomment">/// Set number of workers to start.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// By default, server uses number of available logical CPU as thread count.</span>
+    <span class="doccomment">/// By default, the number of available physical CPUs is used as the worker count.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">workers</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">builder</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">workers</span>(<span class="ident">num</span>);
         <span class="self">self</span>
@@ -882,9 +896,15 @@
     <span class="doccomment">/// To disable timeout set value to 0.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default client timeout is set to 5000 milliseconds.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_timeout</span>(<span class="self">self</span>, <span class="ident">val</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">client_timeout</span> <span class="op">=</span> <span class="ident">val</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_request_timeout</span>(<span class="self">self</span>, <span class="ident">dur</span>: <span class="ident">Duration</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">client_request_timeout</span> <span class="op">=</span> <span class="ident">dur</span>;
         <span class="self">self</span>
+    }
+
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Renamed to `client_request_timeout`.&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_timeout</span>(<span class="self">self</span>, <span class="ident">dur</span>: <span class="ident">Duration</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">client_request_timeout</span>(<span class="ident">dur</span>)
     }
 
     <span class="doccomment">/// Set server connection shutdown timeout in milliseconds.</span>
@@ -895,9 +915,15 @@
     <span class="doccomment">/// To disable timeout set value to 0.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// By default client timeout is set to 5000 milliseconds.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_shutdown</span>(<span class="self">self</span>, <span class="ident">val</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">client_shutdown</span> <span class="op">=</span> <span class="ident">val</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_disconnect_timeout</span>(<span class="self">self</span>, <span class="ident">dur</span>: <span class="ident">Duration</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">client_disconnect_timeout</span> <span class="op">=</span> <span class="ident">dur</span>;
         <span class="self">self</span>
+    }
+
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;4.0.0&quot;</span>, <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;Renamed to `client_disconnect_timeout`.&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_shutdown</span>(<span class="self">self</span>, <span class="ident">dur</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">client_disconnect_timeout</span>(<span class="ident">Duration::from_millis</span>(<span class="ident">dur</span>))
     }
 
     <span class="doccomment">/// Set server host name.</span>
@@ -973,8 +999,8 @@
 
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService::build</span>()
                         .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
-                        .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>)
-                        .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>)
+                        .<span class="ident">client_request_timeout</span>(<span class="ident">c</span>.<span class="ident">client_request_timeout</span>)
+                        .<span class="ident">client_disconnect_timeout</span>(<span class="ident">c</span>.<span class="ident">client_disconnect_timeout</span>)
                         .<span class="ident">local_addr</span>(<span class="ident">addr</span>);
 
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">handler</span>) <span class="op">=</span> <span class="ident">on_connect_fn</span>.<span class="ident">clone</span>() {
@@ -1031,8 +1057,8 @@
 
                     <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService::build</span>()
                         .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
-                        .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>)
-                        .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>)
+                        .<span class="ident">client_request_timeout</span>(<span class="ident">c</span>.<span class="ident">client_request_timeout</span>)
+                        .<span class="ident">client_disconnect_timeout</span>(<span class="ident">c</span>.<span class="ident">client_disconnect_timeout</span>)
                         .<span class="ident">local_addr</span>(<span class="ident">addr</span>);
 
                     <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">handler</span>) <span class="op">=</span> <span class="ident">on_connect_fn</span>.<span class="ident">clone</span>() {
@@ -1092,8 +1118,8 @@
 
                     <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService::build</span>()
                         .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
-                        .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>)
-                        .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>);
+                        .<span class="ident">client_request_timeout</span>(<span class="ident">c</span>.<span class="ident">client_request_timeout</span>)
+                        .<span class="ident">client_disconnect_timeout</span>(<span class="ident">c</span>.<span class="ident">client_disconnect_timeout</span>);
 
                     <span class="kw">let</span> <span class="ident">svc</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">handler</span>) <span class="op">=</span> <span class="ident">on_connect_fn</span>.<span class="ident">clone</span>() {
                         <span class="ident">svc</span>.<span class="ident">on_connect_ext</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">io</span>: <span class="kw-2">&amp;</span><span class="kw">_</span>, <span class="ident">ext</span>: <span class="kw">_</span><span class="op">|</span> (<span class="ident">handler</span>)(<span class="ident">io</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Any</span>, <span class="ident">ext</span>))
@@ -1219,8 +1245,8 @@
             <span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">io</span>: <span class="ident">UnixStream</span><span class="op">|</span> <span class="kw">async</span> { <span class="prelude-val">Ok</span>((<span class="ident">io</span>, <span class="ident">Protocol::Http1</span>, <span class="prelude-val">None</span>)) }).<span class="ident">and_then</span>({
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">svc</span> <span class="op">=</span> <span class="ident">HttpService::build</span>()
                     .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
-                    .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>)
-                    .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>);
+                    .<span class="ident">client_request_timeout</span>(<span class="ident">c</span>.<span class="ident">client_request_timeout</span>)
+                    .<span class="ident">client_disconnect_timeout</span>(<span class="ident">c</span>.<span class="ident">client_disconnect_timeout</span>);
 
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">handler</span>) <span class="op">=</span> <span class="ident">on_connect_fn</span>.<span class="ident">clone</span>() {
                     <span class="ident">svc</span> <span class="op">=</span> <span class="ident">svc</span>
@@ -1275,8 +1301,8 @@
                 <span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">io</span>: <span class="ident">UnixStream</span><span class="op">|</span> <span class="kw">async</span> { <span class="prelude-val">Ok</span>((<span class="ident">io</span>, <span class="ident">Protocol::Http1</span>, <span class="prelude-val">None</span>)) }).<span class="ident">and_then</span>(
                     <span class="ident">HttpService::build</span>()
                         .<span class="ident">keep_alive</span>(<span class="ident">c</span>.<span class="ident">keep_alive</span>)
-                        .<span class="ident">client_timeout</span>(<span class="ident">c</span>.<span class="ident">client_timeout</span>)
-                        .<span class="ident">client_disconnect</span>(<span class="ident">c</span>.<span class="ident">client_shutdown</span>)
+                        .<span class="ident">client_request_timeout</span>(<span class="ident">c</span>.<span class="ident">client_request_timeout</span>)
+                        .<span class="ident">client_disconnect_timeout</span>(<span class="ident">c</span>.<span class="ident">client_disconnect_timeout</span>)
                         .<span class="ident">finish</span>(<span class="ident">map_config</span>(<span class="ident">fac</span>, <span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">config</span>.<span class="ident">clone</span>())),
                 )
             },
@@ -1356,5 +1382,5 @@
     <span class="prelude-val">Ok</span>(<span class="ident">builder</span>.<span class="ident">build</span>())
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_web" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

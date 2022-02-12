@@ -113,6 +113,20 @@
 <span id="106">106</span>
 <span id="107">107</span>
 <span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">pin::Pin</span>,
     <span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>},
@@ -125,6 +139,17 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
 
 <span class="macro">pin_project!</span> {
+    <span class="doccomment">/// An &quot;either&quot; type specialized for body types.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// It is common, in middleware especially, to conditionally return an inner service&#39;s unknown/</span>
+    <span class="doccomment">/// generic body `B` type or return early with a new response. This type&#39;s &quot;right&quot; variant</span>
+    <span class="doccomment">/// defaults to `BoxBody` since error responses are the common case.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// For example, middleware will often have `type Response = ServiceResponse&lt;EitherBody&lt;B&gt;&gt;`.</span>
+    <span class="doccomment">/// This means that the inner service&#39;s response body type maps to the `Left` variant and the</span>
+    <span class="doccomment">/// middleware&#39;s own error responses use the default `Right` variant of `BoxBody`. Of course,</span>
+    <span class="doccomment">/// there&#39;s no reason it couldn&#39;t use `EitherBody&lt;B, String&gt;` instead if its alternative</span>
+    <span class="doccomment">/// responses have a known type.</span>
     <span class="attribute">#[<span class="ident">project</span> <span class="op">=</span> <span class="ident">EitherBodyProj</span>]</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">EitherBody</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">R</span> <span class="op">=</span> <span class="ident">BoxBody</span><span class="op">&gt;</span> {
@@ -137,7 +162,10 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">L</span><span class="op">&gt;</span> <span class="ident">EitherBody</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">BoxBody</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Creates new `EitherBody` using left variant and boxed right variant.</span>
+    <span class="doccomment">/// Creates new `EitherBody` left variant with a boxed right variant.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the expected `R` type will be inferred and is not `BoxBody` then use the</span>
+    <span class="doccomment">/// [`left`](Self::left) constructor instead.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">body</span>: <span class="ident">L</span>) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::Left</span> { <span class="ident">body</span> }
@@ -222,5 +250,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

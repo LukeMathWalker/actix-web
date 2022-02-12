@@ -786,7 +786,7 @@
             <span class="ident">ContentEncoder::Brotli</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">encoder</span>) =&gt; <span class="kw">match</span> <span class="ident">encoder</span>.<span class="ident">write_all</span>(<span class="ident">data</span>) {
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(()),
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
-                    <span class="macro">trace!</span>(<span class="string">&quot;Error decoding br encoding: {}&quot;</span>, <span class="ident">err</span>);
+                    <span class="macro">log::trace!</span>(<span class="string">&quot;Error decoding br encoding: {}&quot;</span>, <span class="ident">err</span>);
                     <span class="prelude-val">Err</span>(<span class="ident">err</span>)
                 }
             },
@@ -795,7 +795,7 @@
             <span class="ident">ContentEncoder::Gzip</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">encoder</span>) =&gt; <span class="kw">match</span> <span class="ident">encoder</span>.<span class="ident">write_all</span>(<span class="ident">data</span>) {
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(()),
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
-                    <span class="macro">trace!</span>(<span class="string">&quot;Error decoding gzip encoding: {}&quot;</span>, <span class="ident">err</span>);
+                    <span class="macro">log::trace!</span>(<span class="string">&quot;Error decoding gzip encoding: {}&quot;</span>, <span class="ident">err</span>);
                     <span class="prelude-val">Err</span>(<span class="ident">err</span>)
                 }
             },
@@ -804,7 +804,7 @@
             <span class="ident">ContentEncoder::Deflate</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">encoder</span>) =&gt; <span class="kw">match</span> <span class="ident">encoder</span>.<span class="ident">write_all</span>(<span class="ident">data</span>) {
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(()),
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
-                    <span class="macro">trace!</span>(<span class="string">&quot;Error decoding deflate encoding: {}&quot;</span>, <span class="ident">err</span>);
+                    <span class="macro">log::trace!</span>(<span class="string">&quot;Error decoding deflate encoding: {}&quot;</span>, <span class="ident">err</span>);
                     <span class="prelude-val">Err</span>(<span class="ident">err</span>)
                 }
             },
@@ -813,7 +813,7 @@
             <span class="ident">ContentEncoder::Zstd</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">encoder</span>) =&gt; <span class="kw">match</span> <span class="ident">encoder</span>.<span class="ident">write_all</span>(<span class="ident">data</span>) {
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(()),
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
-                    <span class="macro">trace!</span>(<span class="string">&quot;Error decoding ztsd encoding: {}&quot;</span>, <span class="ident">err</span>);
+                    <span class="macro">log::trace!</span>(<span class="string">&quot;Error decoding ztsd encoding: {}&quot;</span>, <span class="ident">err</span>);
                     <span class="prelude-val">Err</span>(<span class="ident">err</span>)
                 }
             },
@@ -860,5 +860,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

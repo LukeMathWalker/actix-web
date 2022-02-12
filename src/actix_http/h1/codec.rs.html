@@ -243,6 +243,12 @@
 <span id="236">236</span>
 <span id="237">237</span>
 <span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">io</span>};
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">Decoder</span>, <span class="ident">Encoder</span>};
@@ -260,9 +266,9 @@
 
 <span class="macro">bitflags!</span> {
     <span class="kw">struct</span> <span class="ident">Flags</span>: <span class="ident">u8</span> {
-        <span class="kw">const</span> <span class="ident">HEAD</span>              <span class="op">=</span> <span class="number">0b0000_0001</span>;
-        <span class="kw">const</span> <span class="ident">KEEPALIVE_ENABLED</span> <span class="op">=</span> <span class="number">0b0000_0010</span>;
-        <span class="kw">const</span> <span class="ident">STREAM</span>            <span class="op">=</span> <span class="number">0b0000_0100</span>;
+        <span class="kw">const</span> <span class="ident">HEAD</span>               <span class="op">=</span> <span class="number">0b0000_0001</span>;
+        <span class="kw">const</span> <span class="ident">KEEP_ALIVE_ENABLED</span> <span class="op">=</span> <span class="number">0b0000_0010</span>;
+        <span class="kw">const</span> <span class="ident">STREAM</span>             <span class="op">=</span> <span class="number">0b0000_0100</span>;
     }
 }
 
@@ -287,7 +293,9 @@
 
 <span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">Codec</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;h1::Codec({:?})&quot;</span>, <span class="self">self</span>.<span class="ident">flags</span>)
+        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;h1::Codec&quot;</span>)
+            .<span class="ident">field</span>(<span class="string">&quot;flags&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">flags</span>)
+            .<span class="ident">finish_non_exhaustive</span>()
     }
 }
 
@@ -296,8 +304,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// `keepalive_enabled` how response `connection` header get generated.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">config</span>: <span class="ident">ServiceConfig</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">keep_alive_enabled</span>() {
-            <span class="ident">Flags::KEEPALIVE_ENABLED</span>
+        <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">keep_alive</span>().<span class="ident">enabled</span>() {
+            <span class="ident">Flags::KEEP_ALIVE_ENABLED</span>
         } <span class="kw">else</span> {
             <span class="ident">Flags::empty</span>()
         };
@@ -321,14 +329,14 @@
 
     <span class="doccomment">/// Check if last response is keep-alive.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keepalive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">conn_type</span> <span class="op">==</span> <span class="ident">ConnectionType::KeepAlive</span>
     }
 
     <span class="doccomment">/// Check if keep-alive enabled on server level.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keepalive_enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags::KEEPALIVE_ENABLED</span>)
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive_enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags::KEEP_ALIVE_ENABLED</span>)
     }
 
     <span class="doccomment">/// Check last request&#39;s message type.</span>
@@ -368,11 +376,13 @@
             <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">set</span>(<span class="ident">Flags::HEAD</span>, <span class="ident">head</span>.<span class="ident">method</span> <span class="op">==</span> <span class="ident">Method::HEAD</span>);
             <span class="self">self</span>.<span class="ident">version</span> <span class="op">=</span> <span class="ident">head</span>.<span class="ident">version</span>;
             <span class="self">self</span>.<span class="ident">conn_type</span> <span class="op">=</span> <span class="ident">head</span>.<span class="ident">connection_type</span>();
+
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">conn_type</span> <span class="op">==</span> <span class="ident">ConnectionType::KeepAlive</span>
-                <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags::KEEPALIVE_ENABLED</span>)
+                <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags::KEEP_ALIVE_ENABLED</span>)
             {
                 <span class="self">self</span>.<span class="ident">conn_type</span> <span class="op">=</span> <span class="ident">ConnectionType::Close</span>
             }
+
             <span class="kw">match</span> <span class="ident">payload</span> {
                 <span class="ident">PayloadType::None</span> =&gt; <span class="self">self</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">None</span>,
                 <span class="ident">PayloadType::Payload</span>(<span class="ident">pl</span>) =&gt; <span class="self">self</span>.<span class="ident">payload</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">pl</span>),
@@ -424,9 +434,11 @@
                     <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">config</span>,
                 )<span class="question-mark">?</span>;
             }
+
             <span class="ident">Message::Chunk</span>(<span class="prelude-val">Some</span>(<span class="ident">bytes</span>)) =&gt; {
                 <span class="self">self</span>.<span class="ident">encoder</span>.<span class="ident">encode_chunk</span>(<span class="ident">bytes</span>.<span class="ident">as_ref</span>(), <span class="ident">dst</span>)<span class="question-mark">?</span>;
             }
+
             <span class="ident">Message::Chunk</span>(<span class="prelude-val">None</span>) =&gt; {
                 <span class="self">self</span>.<span class="ident">encoder</span>.<span class="ident">encode_eof</span>(<span class="ident">dst</span>)<span class="question-mark">?</span>;
             }
@@ -482,5 +494,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

@@ -224,6 +224,31 @@
 <span id="217">217</span>
 <span id="218">218</span>
 <span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
 <span class="kw">const</span> <span class="ident">GEN_DELIMS</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;:/?#[]@&quot;</span>;
 
@@ -290,10 +315,15 @@
         <span class="ident">quoter</span>
     }
 
-    <span class="doccomment">/// Re-quotes... ?</span>
+    <span class="doccomment">/// Decodes safe percent-encoded sequences from `val`.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns `None` when no modification to the original string was required.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">requote</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">val</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Returns `None` when no modification to the original byte string was required.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Non-ASCII bytes are accepted as valid input.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Behavior for invalid/incomplete percent-encoding sequences is unspecified and may include</span>
+    <span class="doccomment">/// removing the invalid sequence from the output or passing it as-is.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">requote</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">val</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">has_pct</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pct</span> <span class="op">=</span> [<span class="string">b&#39;%&#39;</span>, <span class="number">0</span>, <span class="number">0</span>];
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">idx</span> <span class="op">=</span> <span class="number">0</span>;
@@ -347,7 +377,12 @@
             <span class="ident">idx</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
         }
 
-        <span class="ident">cloned</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">data</span><span class="op">|</span> <span class="ident">String::from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>).<span class="ident">into_owned</span>())
+        <span class="ident">cloned</span>
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">requote_str_lossy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">requote</span>(<span class="ident">val</span>.<span class="ident">as_bytes</span>())
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">data</span><span class="op">|</span> <span class="ident">String::from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>).<span class="ident">into_owned</span>())
     }
 }
 
@@ -427,14 +462,29 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">custom_quoter</span>() {
         <span class="kw">let</span> <span class="ident">q</span> <span class="op">=</span> <span class="ident">Quoter::new</span>(<span class="string">b&quot;&quot;</span>, <span class="string">b&quot;+&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%25c&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a%c&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%2Bc&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a%2Bc&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%25c&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">b&quot;/a%c&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%2Bc&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">b&quot;/a%2Bc&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">q</span> <span class="op">=</span> <span class="ident">Quoter::new</span>(<span class="string">b&quot;%+&quot;</span>, <span class="string">b&quot;/&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%25b%2Bc&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a%b+c&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%2fb&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a%2fb&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%2Fb&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a%2Fb&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%0Ab&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;/a\nb&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%25b%2Bc&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">b&quot;/a%b+c&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%2fb&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">b&quot;/a%2fb&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%2Fb&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">b&quot;/a%2Fb&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%0Ab&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">b&quot;/a\nb&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%FE\xffb&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">b&quot;/a\xfe\xffb&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a\xfe\xffb&quot;</span>), <span class="prelude-val">None</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">non_ascii</span>() {
+        <span class="kw">let</span> <span class="ident">q</span> <span class="op">=</span> <span class="ident">Quoter::new</span>(<span class="string">b&quot;%+&quot;</span>, <span class="string">b&quot;/&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%FE\xffb&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">b&quot;/a\xfe\xffb&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a\xfe\xffb&quot;</span>), <span class="prelude-val">None</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">invalid_sequences</span>() {
+        <span class="kw">let</span> <span class="ident">q</span> <span class="op">=</span> <span class="ident">Quoter::new</span>(<span class="string">b&quot;%+&quot;</span>, <span class="string">b&quot;/&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">q</span>.<span class="ident">requote</span>(<span class="string">b&quot;/a%2x%2X%%&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">b&quot;/a%2x%2X&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -444,5 +494,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_router" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_router" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

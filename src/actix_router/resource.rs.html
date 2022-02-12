@@ -1812,14 +1812,6 @@
 <span id="1805">1805</span>
 <span id="1806">1806</span>
 <span id="1807">1807</span>
-<span id="1808">1808</span>
-<span id="1809">1809</span>
-<span id="1810">1810</span>
-<span id="1811">1811</span>
-<span id="1812">1812</span>
-<span id="1813">1813</span>
-<span id="1814">1814</span>
-<span id="1815">1815</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">collections::HashMap</span>,
@@ -1830,10 +1822,7 @@
 <span class="kw">use</span> <span class="ident">firestorm</span>::{<span class="ident">profile_fn</span>, <span class="ident">profile_method</span>, <span class="ident">profile_section</span>};
 <span class="kw">use</span> <span class="ident">regex</span>::{<span class="ident">escape</span>, <span class="ident">Regex</span>, <span class="ident">RegexSet</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathItem</span>},
-    <span class="ident">IntoPatterns</span>, <span class="ident">Patterns</span>, <span class="ident">Resource</span>, <span class="ident">ResourcePath</span>,
-};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">path::PathItem</span>, <span class="ident">IntoPatterns</span>, <span class="ident">Patterns</span>, <span class="ident">Resource</span>, <span class="ident">ResourcePath</span>};
 
 <span class="kw">const</span> <span class="ident">MAX_DYNAMIC_SEGMENTS</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">16</span>;
 
@@ -2437,7 +2426,7 @@
         }
     }
 
-    <span class="doccomment">/// Collects dynamic segment values into `path`.</span>
+    <span class="doccomment">/// Collects dynamic segment values into `resource`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `true` if `path` matches this resource.</span>
     <span class="doccomment">///</span>
@@ -2457,9 +2446,9 @@
     <span class="doccomment">/// assert_eq!(path.get(&quot;path&quot;).unwrap(), &quot;HEAD/Cargo.toml&quot;);</span>
     <span class="doccomment">/// assert_eq!(path.unprocessed(), &quot;&quot;);</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">capture_match_info</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">ResourcePath</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">path</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Path</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">capture_match_info</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Resource</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">resource</span>: <span class="kw-2">&amp;mut</span> <span class="ident">R</span>) -&gt; <span class="ident">bool</span> {
         <span class="macro">profile_method!</span>(<span class="ident">capture_match_info</span>);
-        <span class="self">self</span>.<span class="ident">capture_match_info_fn</span>(<span class="ident">path</span>, <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="bool-val">true</span>, ())
+        <span class="self">self</span>.<span class="ident">capture_match_info_fn</span>(<span class="ident">resource</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="bool-val">true</span>)
     }
 
     <span class="doccomment">/// Collects dynamic segment values into `resource` after matching paths and executing</span>
@@ -2477,13 +2466,12 @@
     <span class="doccomment">/// use actix_router::{Path, ResourceDef};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// fn try_match(resource: &amp;ResourceDef, path: &amp;mut Path&lt;&amp;str&gt;) -&gt; bool {</span>
-    <span class="doccomment">///     let admin_allowed = std::env::var(&quot;ADMIN_ALLOWED&quot;).ok();</span>
+    <span class="doccomment">///     let admin_allowed = std::env::var(&quot;ADMIN_ALLOWED&quot;).is_ok();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">///     resource.capture_match_info_fn(</span>
     <span class="doccomment">///         path,</span>
     <span class="doccomment">///         // when env var is not set, reject when path contains &quot;admin&quot;</span>
-    <span class="doccomment">///         |res, admin_allowed| !res.path().contains(&quot;admin&quot;),</span>
-    <span class="doccomment">///         &amp;admin_allowed</span>
+    <span class="doccomment">///         |res| !(!admin_allowed &amp;&amp; res.path().contains(&quot;admin&quot;)),</span>
     <span class="doccomment">///     )</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">///</span>
@@ -2500,15 +2488,10 @@
     <span class="doccomment">/// assert!(!try_match(&amp;resource, &amp;mut path));</span>
     <span class="doccomment">/// assert_eq!(path.unprocessed(), &quot;/user/admin/stars&quot;);</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">capture_match_info_fn</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">F</span>, <span class="ident">U</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">resource</span>: <span class="kw-2">&amp;mut</span> <span class="ident">R</span>,
-        <span class="ident">check_fn</span>: <span class="ident">F</span>,
-        <span class="ident">user_data</span>: <span class="ident">U</span>,
-    ) -&gt; <span class="ident">bool</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">capture_match_info_fn</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">resource</span>: <span class="kw-2">&amp;mut</span> <span class="ident">R</span>, <span class="ident">check_fn</span>: <span class="ident">F</span>) -&gt; <span class="ident">bool</span>
     <span class="kw">where</span>
         <span class="ident">R</span>: <span class="ident">Resource</span>,
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">R</span>, <span class="ident">U</span>) -&gt; <span class="ident">bool</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">R</span>) -&gt; <span class="ident">bool</span>,
     {
         <span class="macro">profile_method!</span>(<span class="ident">capture_match_info_fn</span>);
 
@@ -2584,7 +2567,7 @@
             }
         };
 
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">check_fn</span>(<span class="ident">resource</span>, <span class="ident">user_data</span>) {
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">check_fn</span>(<span class="ident">resource</span>) {
             <span class="kw">return</span> <span class="bool-val">false</span>;
         }
 
@@ -2679,7 +2662,7 @@
         <span class="ident">S</span>: <span class="ident">BuildHasher</span>,
     {
         <span class="macro">profile_method!</span>(<span class="ident">resource_path_from_map</span>);
-        <span class="self">self</span>.<span class="ident">build_resource_path</span>(<span class="ident">path</span>, <span class="op">|</span><span class="ident">name</span><span class="op">|</span> <span class="ident">values</span>.<span class="ident">get</span>(<span class="ident">name</span>).<span class="ident">map</span>(<span class="ident">AsRef</span>::<span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="ident">::as_ref</span>))
+        <span class="self">self</span>.<span class="ident">build_resource_path</span>(<span class="ident">path</span>, <span class="op">|</span><span class="ident">name</span><span class="op">|</span> <span class="ident">values</span>.<span class="ident">get</span>(<span class="ident">name</span>))
     }
 
     <span class="doccomment">/// Returns true if `prefix` acts as a proper prefix (i.e., separated by a slash) in `path`.</span>
@@ -2729,7 +2712,7 @@
                 }
 
                 <span class="kw">let</span> <span class="ident">pattern_re_set</span> <span class="op">=</span> <span class="ident">RegexSet::new</span>(<span class="ident">re_set</span>).<span class="ident">unwrap</span>();
-                <span class="kw">let</span> <span class="ident">segments</span> <span class="op">=</span> <span class="ident">segments</span>.<span class="ident">unwrap_or_else</span>(<span class="ident">Vec::new</span>);
+                <span class="kw">let</span> <span class="ident">segments</span> <span class="op">=</span> <span class="ident">segments</span>.<span class="ident">unwrap_or_default</span>();
 
                 (
                     <span class="ident">PatternType::DynamicSet</span>(<span class="ident">pattern_re_set</span>, <span class="ident">pattern_data</span>),
@@ -2979,6 +2962,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Path</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">equivalence</span>() {
@@ -3636,5 +3620,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_router" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_router" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>

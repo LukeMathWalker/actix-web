@@ -303,14 +303,18 @@
 <span id="296">296</span>
 <span id="297">297</span>
 <span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">Decoder</span>, <span class="ident">Encoder</span>};
 <span class="kw">use</span> <span class="ident">bitflags::bitflags</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::{<span class="ident">Bytes</span>, <span class="ident">BytesMut</span>};
 <span class="kw">use</span> <span class="ident">bytestring::ByteString</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::frame::Parser</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::proto</span>::{<span class="ident">CloseReason</span>, <span class="ident">OpCode</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::ProtocolError</span>;
+<span class="kw">use</span> <span class="kw">super</span>::{
+    <span class="ident">frame::Parser</span>,
+    <span class="ident">proto</span>::{<span class="ident">CloseReason</span>, <span class="ident">OpCode</span>},
+    <span class="ident">ProtocolError</span>,
+};
 
 <span class="doccomment">/// A WebSocket message.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
@@ -556,7 +560,7 @@
                             }
                         }
                         <span class="kw">_</span> =&gt; {
-                            <span class="macro">error!</span>(<span class="string">&quot;Unfinished fragment {:?}&quot;</span>, <span class="ident">opcode</span>);
+                            <span class="macro">log::error!</span>(<span class="string">&quot;Unfinished fragment {:?}&quot;</span>, <span class="ident">opcode</span>);
                             <span class="prelude-val">Err</span>(<span class="ident">ProtocolError::ContinuationFragment</span>(<span class="ident">opcode</span>))
                         }
                     };
@@ -602,5 +606,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (21b4a9cfd 2022-01-27)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="actix_http" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (e789f3a3a 2022-02-11)" ></div>
 </body></html>
